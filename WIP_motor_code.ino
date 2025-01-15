@@ -4,7 +4,10 @@
 
 #define TOLERANCE 0.01  // Tolerance for reaching the target position
 #define MOTOR_SPEED 1.0 // Default motor speed in rad/s
-#define Home 0.0  //Encoder home, will likely need to seperate for Trough and Sort
+#define SortHome 0.0  //Sorting Encoder home
+#define TroughHome 0.0 //Trough Encoder home
+#define BAUDRATE 57600 // Baudrate of Dynamixel communication
+
 
 // Global variables for encoder values
 double sort_current_pos = 0.0;
@@ -15,32 +18,34 @@ double speed;
 std_msgs::Float64 command;
 std_msgs::Float64 STOP;
 
-ros::Rate rate(100);  // 100 Hz loop rate
-
 // Callback for Sort motor encoder
-void SortEncoderCallback(const std_msgs::Float64::ConstPtr& msg) {
+void SortEncoderCallback(const std_msgs::Float64::Const& msg) {
     sort_current_pos = msg->data;
 }
 
 // Callback for Trough motor encoder
-void TroughEncoderCallback(const std_msgs::Float64::ConstPtr& msg) {
+void TroughEncoderCallback(const std_msgs::Float64::Const& msg) {
     trough_current_pos = msg->data;
 }
 
-void Rotate(double CURR, double TARGET, double SPEED){
+void Rotate(double CURR, double TARGET, ros::Publisher& pub, double speed){
+  //Rotate until Target is reached
   while (fabs(CURR - TARGET) > TOLERANCE) {
-        command.data = SPEED * ((CURR < TARGET) ? 1 : -1);
+        command.data = speed * ((CURR < TARGET) ? 1 : -1);
         pub.publish(command);
         ros::spinOnce();
-        rate.sleep();
     }
   pub.publish(STOP); // Stop motor
 }
 
 //Sort one direction and reset
-void MotorControl(ros::Publisher& pub, target) {
-    Rotate(sort_current_pos, target);  // Move to π/3
-    Rotate(sort_current_pos, 0); // Return to 0
+void SortMotorControl(ros::Publisher& pub, double target) {
+    Rotate(sort_current_pos, target, pub);  // Move to target
+    Rotate(sort_current_pos, SortHome, pub); // Return to home
+}
+void TroughMotorControl(ros::Publisher& pub, double target) {
+    Rotate(trough_current_pos, target, pub);  // Move to target
+    Rotate(trough_current_pos, TroughHome, pub); // Return to home
 }
 
 
@@ -48,21 +53,20 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "motor_controller");
     ros::NodeHandle nh;
 
+    STOP.data = 0.0;
+
     // Publishers for motor angular velocity
-    ros::Publisher sort_pub = nh.advertise<std_msgs::Float64>"/6_ang_vel", 10);
-    ros::Publisher trough_pub = nh.advertise<std_msgs::Float64>"/5_ang_vel", 10);
+    ros::Publisher sort_pub = nh.advertise("/6_ang_vel", 10);
+    ros::Publisher trough_pub = nh.advertise("/5_ang_vel", 10);
 
     // Subscribers for encoders
-    ros::Subscriber sort_enc_sub = nh.subscribe("/6_enc", 10, SortEncoderCallback);
-    ros::Subscriber trough_enc_sub = nh.subscribe("/5_enc", 10, TroughEncoderCallback);
+    ros::Subscriber<std_msgs::Float64> sort_enc_sub = nh.subscribe("/6_enc", 10, SortEncoderCallback);
+    ros::Subscriber<std_msgs::Float64> trough_enc_sub = nh.subscribe("/5_enc", 10, TroughEncoderCallback);
 
-    // Example usage of the functions
-    target = M_PI / 5;
     speed = 0.5;
-    MotorControl(trough_pub, target, speed); //Spill Trough
-    target = 2 * M_PI / 3;
-    MotorControl(sort_pub, target, speed); //Sort one way
-    target = -2 * M_PI / 3;
-    MotorControl(sort_pub, target, speed);
+    // Example usage of the functions
+    TroughMotorControl(trough_pub, M_PI / 5, speed); //Spill Trough
+    SortMotorControl(sort_pub, 2 * M_PI / 3, speed); //Sort one way
+    SortMotorControl(sort_pub, -2 * M_PI / 3, speed);
     return 0;
 }
