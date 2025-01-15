@@ -10,6 +10,7 @@
 double sort_current_pos = 0.0;
 double trough_current_pos = 0.0;
 double target = 0.0;
+double speed;
 
 std_msgs::Float64 command;
 std_msgs::Float64 STOP;
@@ -26,9 +27,9 @@ void TroughEncoderCallback(const std_msgs::Float64::ConstPtr& msg) {
     trough_current_pos = msg->data;
 }
 
-void Rotate(double CURR, double TARGET){
+void Rotate(double CURR, double TARGET, double SPEED){
   while (fabs(CURR - TARGET) > TOLERANCE) {
-        command.data = MOTOR_SPEED * ((CURR < TARGET) ? 1 : -1);
+        command.data = SPEED * ((CURR < TARGET) ? 1 : -1);
         pub.publish(command);
         ros::spinOnce();
         rate.sleep();
@@ -57,10 +58,11 @@ int main(int argc, char** argv) {
 
     // Example usage of the functions
     target = M_PI / 5;
-    MotorControl(trough_pub, target); //Spill Trough
+    speed = 0.5;
+    MotorControl(trough_pub, target, speed); //Spill Trough
     target = 2 * M_PI / 3;
-    MotorControl(sort_pub, target); //Sort one way
+    MotorControl(sort_pub, target, speed); //Sort one way
     target = -2 * M_PI / 3;
-    MotorControl(sort_pub, target);
+    MotorControl(sort_pub, target, speed);
     return 0;
 }
