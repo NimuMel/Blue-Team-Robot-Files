@@ -4,6 +4,7 @@
 
 /* Authors: Dr. Eli Buckner, North Carolina State University */
 
+#include <math.h>
 #include <ros.h>
 #include <sensor_msgs/Imu.h>
 #include <std_msgs/Float64.h>
@@ -246,18 +247,18 @@ void loop()
 
     if(imu.gyroData[2] > 0){      //LOGAN WROTE THIS basically if the orientation is decreasing while rotation occurs in the positive direction it corrects, same if orientation increases with negative rotational velocity.
       if(imu.quat[3] < z_deg_prev.data){
-        z_degrees.data = imu.quat[3] * 180;
+        z_degrees.data = imu.quat[3] * M_PI;
       }
       else if(imu.quat[3] > z_deg_prev.data){
-        z_degrees.data = imu.quat[3] * -180;
+        z_degrees.data = imu.quat[3] * -M_PI;
       }
     }
     if(imu.gyroData[2] < 0){
       if(imu.quat[3] > z_deg_prev.data){
-        z_degrees.data = imu.quat[3] * 180;
+        z_degrees.data = imu.quat[3] * M_PI;
       }
       else if(imu.quat[3] < z_deg_prev.data){
-        z_degrees.data = imu.quat[3] * -180;
+        z_degrees.data = imu.quat[3] * -M_PI;
       }
     }
 
