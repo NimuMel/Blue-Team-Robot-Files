@@ -7,6 +7,7 @@
 #include <tf/transform_broadcaster.h>
 #include <IMU.h>
 #include <DynamixelWorkbench.h>
+#include <math.h>
 
 #if defined(__OPENCM904__)
   #define DEVICE_NAME "DXL_PORT" // Dynamixel on Serial3(USART3) <- OpenCM 485EXP
@@ -37,6 +38,7 @@ uint8_t dxl_RR = DXL_RR_ID;
 uint8_t dxl_trough = DXL_TROUGH_ID;
 uint8_t dxl_sort = DXL_SORT_ID;
 int32_t trough_home_speed = 0.1;    //sets the speed of the trough motor while homing
+int32_t troughStop = 0.0;
 float troughHome = 0.0;   //trough home position
 // ROS node handle
 ros::NodeHandle nh;
@@ -66,6 +68,9 @@ void wheel_4_write(const std_msgs::Float64& msg)
 {
   dxl_wb.goalVelocity(dxl_RL, (int32_t)msg.data);
 }
+void trough_write(const std_msgs::Float64& msg){
+  dxl_wb.goalPosition(dxl_trough, (int32_t)msg.data);
+}
 
 // Wheel speed subscribers
 
@@ -74,7 +79,7 @@ ros::Subscriber<std_msgs::Float64> w2_topic("/wheel_2_speed", wheel_2_write );
 ros::Subscriber<std_msgs::Float64> w3_topic("/wheel_3_speed", wheel_3_write );
 ros::Subscriber<std_msgs::Float64> w4_topic("/wheel_4_speed", wheel_4_write );
 ros::Subscriber<std_msgs::Float64> trough_topic("/trough_speed", trough_write );
-ros::Subscriber<std_msgs::Float64> sort_topic("/sort_speed", sort_write );
+
 
 // Publish encoder data
 void publishEncoderData() {
@@ -178,10 +183,10 @@ void setup()
 
   dxl_wb.goalVelocity(dxl_trough, trough_home_speed); //trough begins lowering slowly
   int32_t currentLoad = 0;
-  if(dxl.itemRead(dxl_trough, "Present_Load", &currentLoad)){ //checks current motor load
-    float load_percentage = (abs(present_load) / 1023.0) * 100.0;
-    if(present_load < 0 && load_percentage > 20){   
-      dxl_wb.goalVelocity(dxl_trough, 0.0);   //if load is negative (clockwise), and greater than 20% max capacity, stop
+  if(dxl_wb.itemRead(dxl_trough, "Present_Load", &currentLoad)){ //checks current motor load
+    float load_percentage = (abs(currentLoad) / 1023.0) * 100.0;
+    if(currentLoad < 0 && load_percentage > 20){   
+      dxl_wb.goalVelocity(dxl_trough, troughStop);   //if load is negative (clockwise), and greater than 20% max capacity, stop
     }
   }
   
