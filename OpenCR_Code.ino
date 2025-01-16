@@ -21,16 +21,23 @@
 #define DXL_FL_ID 2 // ID of the front-left Dynamixel
 #define DXL_RR_ID 3 // ID of the rear-right Dynamixel
 #define DXL_RL_ID 4 // ID of the rear-left Dynamixel
+#define DXL_TROUGH_ID 5 //ID of trough Motor
+#define DXL_SORT_ID 6 //ID of sorting motor 
 #define ACCELERATION_MODE 1 // Argument for wheel mode
 #define VELOCITY_CONTROL_MODE 1
 #define FORWARD_VELOCITY 1.0f  // Set a higher velocity
-#define MOTOR_IDS {1, 2, 3, 4}
+#define MOTOR_IDS {1, 2, 3, 4, 5, 6}
+
 
 
 uint8_t dxl_FL = DXL_FL_ID;
 uint8_t dxl_FR = DXL_FR_ID;
 uint8_t dxl_RL = DXL_RL_ID;
 uint8_t dxl_RR = DXL_RR_ID;
+uint8_t dxl_trough = DXL_TROUGH_ID;
+uint8_t dxl_sort = DXL_SORT_ID;
+int32_t trough_home_speed = 0.1;    //sets the speed of the trough motor while homing
+float troughHome = 0.0;   //trough home position
 // ROS node handle
 ros::NodeHandle nh;
 
@@ -66,7 +73,8 @@ ros::Subscriber<std_msgs::Float64> w1_topic("/wheel_1_speed", wheel_1_write );
 ros::Subscriber<std_msgs::Float64> w2_topic("/wheel_2_speed", wheel_2_write );
 ros::Subscriber<std_msgs::Float64> w3_topic("/wheel_3_speed", wheel_3_write );
 ros::Subscriber<std_msgs::Float64> w4_topic("/wheel_4_speed", wheel_4_write );
-
+ros::Subscriber<std_msgs::Float64> trough_topic("/trough_speed", trough_write );
+ros::Subscriber<std_msgs::Float64> sort_topic("/sort_speed", sort_write );
 
 // Publish encoder data
 void publishEncoderData() {
@@ -100,7 +108,6 @@ void publishEncoderData() {
     nh.logerror("Failed to get encoder data for motor 4");
     encoder_data.data[3] = 0.0;
   }
-
   encoder_pub.publish(&encoder_data);
 }
 
@@ -131,7 +138,7 @@ void setup()
   // Ping all motors and set them to velocity control mode
   uint16_t model_number = 0;
   uint8_t motor_ids[] = MOTOR_IDS;  // Motor IDs
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 6; i++) {
     uint8_t motor_id = motor_ids[i];
     result = dxl_wb.ping(motor_id, &model_number, &log);
     if (!result) {
@@ -168,6 +175,18 @@ void setup()
     Serial.print("Torque enabled for motor ");
     Serial.println(motor_id);
   }
+
+  dxl_wb.goalVelocity(dxl_trough, trough_home_speed); //trough begins lowering slowly
+  int32_t currentLoad = 0;
+  if(dxl.itemRead(dxl_trough, "Present_Load", &currentLoad)){ //checks current motor load
+    float load_percentage = (abs(present_load) / 1023.0) * 100.0;
+    if(present_load < 0 && load_percentage > 20){   
+      dxl_wb.goalVelocity(dxl_trough, 0.0);   //if load is negative (clockwise), and greater than 20% max capacity, stop
+    }
+  }
+  
+  dxl_wb.setPositionControlMode(dxl_trough);  //change trough to position control
+  dxl_wb.getRadian(dxl_trough, &troughHome);  //save the radian value of home location
 }
 
 // Main loop function
