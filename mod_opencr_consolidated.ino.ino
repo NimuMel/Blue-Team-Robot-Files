@@ -2,7 +2,7 @@
 
 *******************************************************************************/
 
-/* Authors: Dr. Eli Buckner, North Carolina State University */
+/* Authors: Dr. Eli Buckner, North Carolina State University, Logan Earp, Nimue Meller*/
 
 #include <math.h>
 #include <ros.h>
