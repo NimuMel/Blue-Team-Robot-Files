@@ -55,7 +55,7 @@ Blue-Team-Robot-Files/
 ├── Sensor_Test_Code/      # Sensor testing scripts (IMU, Lidar, etc.)
 ├── catkin_ws/             # ROS workspace
 │   ├── src/
-│   │   ├── mobile_ik/     # Inverse kinematics for omni-wheels
+│   │   ├── omni_wheel_ik/     # Inverse kinematics for omni-wheels
 │   │   ├── pose_est/      # Pose estimation and position tracking
 │   │   ├── pose_controller/  # Local pose control for autonomous navigation
 ├── LICENSE                # Licensing information
@@ -82,30 +82,6 @@ Blue-Team-Robot-Files/
 3. Install dependencies:
    - [ROS](http://wiki.ros.org/ROS/Installation) (tested with Ubuntu and ROS Noetic).  
    - Follow the setup instructions for [Dynamixel SDK](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/).  
-
----
-
-## Usage
-
-### 1. Run ROS Nodes
-Launch the robot control system:
-```bash
-roslaunch robot_control control.launch
-```
-
-### 2. Test Sensors
-Run scripts to test hardware components like Lidar or IMU:
-```bash
-rosrun sensor_test lidar_test.py
-```
-
-### 3. Manual Control
-Enable manual control using an Xbox controller:
-```bash
-roslaunch joy_control joy_control.launch
-```
-
----
 
 ## Dependencies
 
