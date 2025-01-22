@@ -1,0 +1,6 @@
+<launch>
+    <node name="mobile_ik_node" pkg="mobile_ik" type="mobile_ik_node" output="screen" />
+    <node name="rosserial_node" pkg="rosserial_arduino" type="serial_node.py" args="/dev/ttyACM0" />
+    <node name="joy_node" pkg="joy" type="joy_node" output="screen" />
+    <node name="xbox_controller_node" pkg="master" type="xbox_controller_node" output="screen" />
+</launch>

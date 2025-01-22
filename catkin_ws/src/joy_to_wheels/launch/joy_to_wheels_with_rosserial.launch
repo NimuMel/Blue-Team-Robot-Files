@@ -1,0 +1,18 @@
+<launch>
+    <!-- Start the joystick node to get input from the joystick -->
+    <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
+
+    <!-- Start the joy_to_wheels_node to convert joystick input into wheel velocities -->
+    <node pkg="joy_to_wheels" type="joy_to_wheels_node" name="joy_to_wheels_node" output="screen">
+        <!-- Optionally, remap the joy topic if needed -->
+        <remap from="joy" to="/joy"/>
+        <!-- Remap wheel velocity topics if needed -->
+        <remap from="fl_wheel_ang_vel" to="/fl_wheel_ang_vel"/>
+        <remap from="fr_wheel_ang_vel" to="/fr_wheel_ang_vel"/>
+        <remap from="bl_wheel_ang_vel" to="/bl_wheel_ang_vel"/>
+        <remap from="br_wheel_ang_vel" to="/br_wheel_ang_vel"/>
+    </node>
+
+    <!-- Start the rosserial node to interface with the OpenCR or microcontroller -->
+    <node name="rosserial_node" pkg="rosserial_arduino" type="serial_node.py" args="/dev/ttyACM0" />
+</launch>
