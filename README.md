@@ -1,121 +1,49 @@
-<<<<<<< HEAD
-Blue Team Robot Files
-This repository contains the code and resources developed by the Blue Team for the Senior Project in UNCA's JEM Mechatronics Program. It serves as a centralized storage for all project-related files, including robot control algorithms, sensor integration, and simulation environments.
-
-Table of Contents
-Project Overview
-Repository Structure
-Getting Started
-Dependencies
-Usage
-Contributing
-License
-Project Overview
-The Blue Team's Senior Project focuses on developing a comprehensive control system for an omni-directional robot. Key features include:
-
-Omni-Wheel Drive Control: Implementing algorithms to manage the movement of the robot in any direction.
-Sensor Integration: Incorporating various sensors for environment perception and navigation.
-Simulation Environment: Setting up a simulation framework to test and validate control strategies before deployment.
-Repository Structure
-The repository is organized as follows:
-
-OpenCR_Code/: Contains firmware and control code for the OpenCR board.
-Sensor_Test_Code/: Includes scripts and programs for testing individual sensors.
-catkin_ws/: ROS workspace containing packages for robot control, sensor fusion, and simulation.
-Getting Started
-To get a local copy of the project up and running, follow these steps:
-
-Clone the repository:
-bash
-Copy
-Edit
-git clone https://github.com/NimuMel/Blue-Team-Robot-Files.git
-Navigate to the project directory:
-bash
-Copy
-Edit
-cd Blue-Team-Robot-Files
-Dependencies
-Ensure the following software and libraries are installed:
-
-ROS (Robot Operating System): Required for the catkin_ws packages.
-OpenCR Board Drivers: Necessary for uploading firmware to the OpenCR board.
-Sensor Libraries: Depending on the sensors used, install the appropriate libraries.
-Usage
-Building the ROS Workspace:
-bash
-Copy
-Edit
-cd catkin_ws
-catkin_make
-Sourcing the Workspace:
-bash
-Copy
-Edit
-source devel/setup.bash
-Running the Robot Control Node:
-bash
-Copy
-Edit
-roslaunch robot_control control.launch
-Contributing
-Contributions are welcome. Please follow these steps:
-
-Fork the repository.
-Create a new branch (git checkout -b feature/YourFeature).
-Commit your changes (git commit -m 'Add some feature').
-Push to the branch (git push origin feature/YourFeature).
-Open a Pull Request.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Note: This README is based on the current structure and objectives of the Blue Team's Senior Project. For detailed information, please refer to the specific directories and files within the repository.
-
-
-Sources
-=======
-Here's a complete and polished version of the README file for your GitHub project:
+Here’s a rewritten version of your README with a detailed and polished structure:
 
 ---
 
 # Blue Team Robot Files
 
-This repository contains the code and resources developed by the **Blue Team** for the Senior Project in UNCA's JEM Mechatronics Program. The project focuses on designing, building, and programming an omni-directional robot capable of navigating a defined arena, collecting objects, and operating autonomously.
+This repository stores all code and resources for the **Senior Project** by the **Blue Team** of UNCA's JEM Mechatronics Program. The project aims to design, build, and program an omni-directional robot capable of navigating a controlled arena, collecting objects, and operating both autonomously and manually.
 
 ![Robot](https://img.shields.io/badge/Robot-Omni--Directional-blue) ![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
 ## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Repository Structure](#repository-structure)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [Dependencies](#dependencies)
-7. [Contributing](#contributing)
-8. [License](#license)
+
+1. [Project Overview](#project-overview)  
+2. [Features](#features)  
+3. [Repository Structure](#repository-structure)  
+4. [Installation](#installation)  
+5. [Usage](#usage)  
+6. [Dependencies](#dependencies)  
+7. [Contributing](#contributing)  
+8. [License](#license)  
 
 ---
 
 ## Project Overview
 
-The Blue Team's Senior Project centers around building a 4-wheel omni-directional robot. The robot uses advanced control algorithms and sensor fusion to perform tasks such as object collection and autonomous navigation.
+The **Blue Team Senior Project** focuses on creating a highly versatile omni-directional robot. This project involves applying concepts from mechatronics, robotics, and programming to achieve:
 
-Key goals:
-- Develop a robot capable of smooth, omni-directional movement.
-- Use a combination of sensors (Lidar, IMU, encoders) to detect and navigate obstacles.
-- Incorporate ROS for modular and scalable software design.
+- Precise and smooth robot movement in all directions.  
+- Object collection and handling using specialized mechanisms.  
+- Autonomous and manual operation modes.  
+- Integration of sensors for environmental awareness and navigation.  
+
+This project serves as a culmination of skills learned in the JEM Mechatronics Program, demonstrating both theoretical and practical expertise.
 
 ---
 
 ## Features
 
-- **Omni-Wheel Drive**: Precise, all-directional movement using inverse kinematics.
-- **Sensor Fusion**: Combines data from IMU and encoders using a Kalman filter for accurate position estimation.
-- **ROS Integration**: Prebuilt packages to support control, navigation, and visualization.
-- **Joystick Control**: Real-time manual operation using an Xbox controller.
-- **Dynamixel Servo Management**: Home and operate X-Series servos with intelligent feedback.
+- **Omni-Wheel Drive**: Enables smooth movement in all directions using 4 omni-wheels and inverse kinematics.  
+- **Joystick Integration**: Real-time manual control via an Xbox controller.  
+- **Autonomous Navigation**: Utilizes sensor data for obstacle avoidance and precise movement.  
+- **Sensor Fusion**: Combines IMU and encoder data through a Kalman filter for accurate position tracking.  
+- **ROS Support**: Provides modular software packages for seamless integration and visualization.  
+- **Dynamixel Servo Management**: Efficient control of X-Series servos with homing and position-based operation.  
 
 ---
 
@@ -124,13 +52,13 @@ Key goals:
 ```plaintext
 Blue-Team-Robot-Files/
 ├── OpenCR_Code/           # Firmware and control logic for the OpenCR board
-├── Sensor_Test_Code/      # Scripts for testing sensors (Lidar, IMU, etc.)
+├── Sensor_Test_Code/      # Sensor testing scripts (IMU, Lidar, etc.)
 ├── catkin_ws/             # ROS workspace
 │   ├── src/
 │   │   ├── mobile_ik/     # Inverse kinematics for omni-wheels
-│   │   ├── pose_est/      # Pose estimation and tracking
-│   │   ├── pose_controller/  # Local pose controller for autonomous navigation
-├── LICENSE                # License file
+│   │   ├── pose_est/      # Pose estimation and position tracking
+│   │   ├── pose_controller/  # Local pose control for autonomous navigation
+├── LICENSE                # Licensing information
 └── README.md              # Project documentation
 ```
 
@@ -138,41 +66,41 @@ Blue-Team-Robot-Files/
 
 ## Installation
 
-1. **Clone the repository**:
+1. Clone the repository:
    ```bash
    git clone https://github.com/NimuMel/Blue-Team-Robot-Files.git
    cd Blue-Team-Robot-Files
    ```
 
-2. **Set up the ROS workspace**:
+2. Set up the ROS workspace:
    ```bash
    cd catkin_ws
    catkin_make
    source devel/setup.bash
    ```
 
-3. **Install dependencies**:
-   - [Install ROS](http://wiki.ros.org/ROS/Installation)
-   - Follow the instructions for setting up the [Dynamixel SDK](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/).
+3. Install dependencies:
+   - [ROS](http://wiki.ros.org/ROS/Installation) (tested with Ubuntu and ROS Noetic).  
+   - Follow the setup instructions for [Dynamixel SDK](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/).  
 
 ---
 
 ## Usage
 
-### 1. Run the ROS Nodes
+### 1. Run ROS Nodes
 Launch the robot control system:
 ```bash
 roslaunch robot_control control.launch
 ```
 
-### 2. Test Sensor Integration
-Run the sensor test scripts to verify hardware functionality:
+### 2. Test Sensors
+Run scripts to test hardware components like Lidar or IMU:
 ```bash
 rosrun sensor_test lidar_test.py
 ```
 
-### 3. Run the Joystick Controller
-Start manual control using an Xbox controller:
+### 3. Manual Control
+Enable manual control using an Xbox controller:
 ```bash
 roslaunch joy_control joy_control.launch
 ```
@@ -181,41 +109,41 @@ roslaunch joy_control joy_control.launch
 
 ## Dependencies
 
-Ensure the following are installed:
-- ROS (Robot Operating System)
-- OpenCR board firmware
-- Dynamixel X-Series servos and SDK
-- Python 3.x (for testing scripts)
-- Lidar Sensor libraries
-- Xbox controller drivers (for joystick integration)
+Ensure the following dependencies are installed:
+
+- **ROS**: Required for running the ROS nodes and packages.  
+- **OpenCR Board Firmware**: Upload firmware to the OpenCR microcontroller.  
+- **Dynamixel X-Series Servos**: Includes setup and operation of Dynamixel actuators.  
+- **Lidar Sensor**: Driver and integration for distance measurement.  
+- **Xbox Controller Drivers**: Used for joystick integration.  
 
 ---
 
 ## Contributing
 
-We welcome contributions to improve the project! Here's how you can get involved:
-1. Fork the repository.
-2. Create a new branch:
+We welcome contributions from the community! To contribute:
+
+1. Fork the repository.  
+2. Create a new branch for your feature or bug fix:  
    ```bash
-   git checkout -b feature/YourFeature
-   ```
-3. Commit your changes:
+   git checkout -b feature/your-feature
+   ```  
+3. Commit your changes:  
    ```bash
    git commit -m "Add your descriptive message"
-   ```
-4. Push your changes:
+   ```  
+4. Push the branch to your forked repository:  
    ```bash
-   git push origin feature/YourFeature
-   ```
-5. Open a Pull Request.
+   git push origin feature/your-feature
+   ```  
+5. Open a Pull Request, and provide a detailed description of your changes.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file.
 
 ---
 
-Feel free to modify this README to suit any specific updates or additional features of your project! Let me know if you’d like help with anything else.
->>>>>>> eba0e9997f280f4e283425af1fec8742fb3c2498
+This README is designed to be comprehensive and user-friendly. Let me know if you’d like to further customize any sections or add additional details!
