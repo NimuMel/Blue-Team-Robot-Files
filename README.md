@@ -1,5 +1,3 @@
-Here’s a rewritten version of your README with a detailed and polished structure:
-
 ---
 
 # Blue Team Robot Files
