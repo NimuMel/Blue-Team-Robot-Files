@@ -12,10 +12,17 @@ extern int32_t tilt_pos;
 // Function declarations
 void setupDynWheels();
 void autoHome(uint8_t motor_id);
+void autoHomeScoop();
 void sortInit();
 void sortLeft();
 void sortRight();
 void tiltUp();
 void tiltDown();
+void scoopUp();
+void scoopDown();
+void autoHomeDump();
+void dumpUp();
+void dumpDown();
+
 
 #endif // MOTOR_FUNCTIONS_H

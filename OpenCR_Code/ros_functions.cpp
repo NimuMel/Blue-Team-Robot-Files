@@ -45,6 +45,8 @@ void wheel_4_write(const std_msgs::Float64& msg) {
   dxl_wb.goalVelocity(dxl_RL, (int32_t)msg.data);
 }
 
+// The publishers are remapped for the topic becasue of math
+
 void publishMotor1Data() {
   float radian;
   if (dxl_wb.getRadian(1, &radian)) {
@@ -65,7 +67,7 @@ void publishMotor2Data() {
     nh.logerror("Failed to get encoder data for motor 2");
     motor2_data.data = 0.0;
   }
-  motor2_pub.publish(&motor2_data);
+  motor2_pub.publish(&motor3_data);
 }
 
 // Function to publish encoder data for Motor 3
@@ -77,7 +79,7 @@ void publishMotor3Data() {
     nh.logerror("Failed to get encoder data for motor 3");
     motor3_data.data = 0.0;
   }
-  motor3_pub.publish(&motor3_data);
+  motor3_pub.publish(&motor4_data);
 }
 
 // Function to publish encoder data for Motor 4
@@ -89,5 +91,5 @@ void publishMotor4Data() {
     nh.logerror("Failed to get encoder data for motor 4");
     motor4_data.data = 0.0;
   }
-  motor4_pub.publish(&motor4_data);
+  motor4_pub.publish(&motor1_data);
 }

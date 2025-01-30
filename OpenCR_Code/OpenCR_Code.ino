@@ -8,18 +8,39 @@ void setup() {
   Serial.begin(57600);
   ros_inti();
   setupDynWheels();
-  autoHome(5);
-  sortInit();
+  // autoHome(5);
+  // autoHomeScoop();
+  // autoHomeDump();
+  // sortInit();
+  // delay(2000);
+  // unsigned long startTime = micros(); // Record the start time
+  // scoopUp();
+  // delay(1000);
+  
+  // scoopDown();
   // tiltUp();
   // sortRight();
-  // sortLeft();
   // sortRight();
-  // sortLeft();
   // sortRight();
-  // sortLeft();
   // sortRight();
+  // sortRight();
+  // sortRight();
+  // sortRight();
+  // sortRight();
+  // // sortLeft();
+  // // sortRight();
+  // // sortLeft();
+  // // sortRight();
   // tiltDown();
-  //dxl_wb.goalVelocity(1, 10);
+  // dumpUp();
+  // delay(4000);
+  // dumpDown();
+  // unsigned long endTime = micros(); // Record the end time
+
+  // unsigned long elapsedTime = endTime - startTime; // Calculate elapsed time
+  // Serial.print("Elapsed time: ");
+  // Serial.print(elapsedTime/100000);
+  // Serial.println(" deciseconds");
 }
 
 void loop() {
