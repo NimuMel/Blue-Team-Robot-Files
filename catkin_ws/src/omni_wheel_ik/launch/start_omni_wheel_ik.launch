@@ -1,4 +1,5 @@
 <launch>
+
   <!-- Launch omni_wheel_ik_node.cpp -->
   <node name="omni_wheel_ik_node" pkg="omni_wheel_ik" type="omni_wheel_ik_node" output="screen">
     <!-- Add any parameters or arguments for the omni_wheel_ik_node here -->
@@ -7,8 +8,11 @@
   <!-- Launch rosserial.py -->
   <node name="rosserial_node" pkg="rosserial_arduino" type="serial_node.py" output="screen">
     <param name="port" value="/dev/ttyACM0" /> <!-- Replace with your serial port -->
-    <param name="baud" value="57600" /> <!-- Replace with your desired baud rate -->
+    <param name="baud" value="115200" /> <!-- Replace with your desired baud rate -->
   </node>
 
   <node name="pose_estimation_node" pkg="pose_estimation" type="pose_estimation_node" output="screen" />
+  <node name="pose_controller" pkg="pose_controller" type="pose_controller_node" output="screen"/>
+
+
 </launch>

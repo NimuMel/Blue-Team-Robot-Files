@@ -92,6 +92,14 @@
 /home/ubuntu/catkin_ws/build/mobile_ik/CMakeFiles/geometry_msgs_generate_messages_eus.dir
 /home/ubuntu/catkin_ws/build/mobile_ik/CMakeFiles/mobile_ik_node.dir
 /home/ubuntu/catkin_ws/build/mobile_ik/CMakeFiles/geometry_msgs_generate_messages_cpp.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/install/strip.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/install/local.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/install.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/list_install_components.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/edit_cache.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/test.dir
+/home/ubuntu/catkin_ws/build/pose_controller/CMakeFiles/pose_controller_node.dir
 /home/ubuntu/catkin_ws/build/pose_estimation/CMakeFiles/install/local.dir
 /home/ubuntu/catkin_ws/build/pose_estimation/CMakeFiles/install.dir
 /home/ubuntu/catkin_ws/build/pose_estimation/CMakeFiles/list_install_components.dir

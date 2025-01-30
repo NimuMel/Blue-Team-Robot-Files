@@ -7,9 +7,9 @@
 
 // Robot-specific constants
 const float WHEEL_RADIUS = 0.056; // Wheel radius in meters
-const float ROBOT_RADIUS = 0.27; // Robot radius in meters
+const float ROBOT_RADIUS = 0.265/2; // Robot radius in meters
 const float TWO_PI = 2.0 * M_PI;
-const float DT = 0.02; // Time step (assumes 100 Hz update rate)
+const float DT = 0.1; // Time step (assumes 50 Hz update rate)
 
 // Global pose
 geometry_msgs::Pose2D robot_pose;
@@ -75,9 +75,9 @@ void calculatePose()
     double Vx = 0, Vy = 0, omega = 0;
     for (int i = 0; i < 4; ++i)
     {
-        Vx -= .01*J[i][0] * wheel_speeds[i];
-        Vy += .01*J[i][1] * wheel_speeds[i];
-        omega -= .01*J[i][2] * wheel_speeds[i];
+        Vy -= 0.01*J[i][0] * wheel_speeds[i];
+        Vx += 0.01*J[i][1] * wheel_speeds[i];
+        omega += 0.01*J[i][2] * wheel_speeds[i];
     }
 
     // Update robot pose
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
     ros::Subscriber encoder4_sub = nh.subscribe("motor4_encoder", 10, encoder4Callback);
 
     // Set the update rate
-    ros::Rate rate(50); // 100 Hz
+    ros::Rate rate(10); // 100 Hz
 
     while (ros::ok())
     {

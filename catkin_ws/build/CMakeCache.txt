@@ -519,6 +519,12 @@ omni_wheel_ik_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/omni_wheel_ik
 omni_wheel_ik_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/omni_wheel_ik
 
 //Value Computed by CMake
+pose_controller_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/pose_controller
+
+//Value Computed by CMake
+pose_controller_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/pose_controller
+
+//Value Computed by CMake
 pose_estimation_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/pose_estimation
 
 //Value Computed by CMake
@@ -705,7 +711,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=11
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

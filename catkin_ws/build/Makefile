@@ -753,6 +753,19 @@ geometry_msgs_generate_messages_cpp/fast:
 .PHONY : geometry_msgs_generate_messages_cpp/fast
 
 #=============================================================================
+# Target rules for targets named pose_controller_node
+
+# Build rule for target.
+pose_controller_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pose_controller_node
+.PHONY : pose_controller_node
+
+# fast build rule for target.
+pose_controller_node/fast:
+	$(MAKE) -f pose_controller/CMakeFiles/pose_controller_node.dir/build.make pose_controller/CMakeFiles/pose_controller_node.dir/build
+.PHONY : pose_controller_node/fast
+
+#=============================================================================
 # Target rules for targets named pose_estimation_node
 
 # Build rule for target.
@@ -979,6 +992,7 @@ help:
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... mobile_ik_node"
 	@echo "... geometry_msgs_generate_messages_cpp"
+	@echo "... pose_controller_node"
 	@echo "... pose_estimation_node"
 	@echo "... joy_to_wheels_node"
 	@echo "... sensor_msgs_generate_messages_py"
