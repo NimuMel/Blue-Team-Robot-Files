@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/catkin_ws/src/joy_to_wheels
+# Install script for directory: /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/joy_to_wheels
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheels.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheels.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/joy_to_wheels/cmake" TYPE FILE FILES
-    "/home/ubuntu/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheelsConfig.cmake"
-    "/home/ubuntu/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheelsConfig-version.cmake"
+    "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheelsConfig.cmake"
+    "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/joy_to_wheels/catkin_generated/installspace/joy_to_wheelsConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/joy_to_wheels" TYPE FILE FILES "/home/ubuntu/catkin_ws/src/joy_to_wheels/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/joy_to_wheels" TYPE FILE FILES "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/joy_to_wheels/package.xml")
 endif()
 

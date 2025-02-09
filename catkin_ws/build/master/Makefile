@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/catkin_ws/build
+CMAKE_BINARY_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/catkin_ws/build/CMakeFiles /home/ubuntu/catkin_ws/build/master/CMakeFiles/progress.marks
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/catkin_ws/build/CMakeFiles 0
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/CMakeFiles /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/master/CMakeFiles/progress.marks
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/clean
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/preinstall
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/preinstall
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 master/CMakeFiles/xbox_controller_node.dir/rule:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/CMakeFiles/xbox_controller_node.dir/rule
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/CMakeFiles/xbox_controller_node.dir/rule
 .PHONY : master/CMakeFiles/xbox_controller_node.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ xbox_controller_node: master/CMakeFiles/xbox_controller_node.dir/rule
 
 # fast build rule for target.
 xbox_controller_node/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/build
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/build
 .PHONY : xbox_controller_node/fast
 
 # Convenience name for target.
 master/CMakeFiles/master.dir/rule:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/CMakeFiles/master.dir/rule
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 master/CMakeFiles/master.dir/rule
 .PHONY : master/CMakeFiles/master.dir/rule
 
 # Convenience name for target.
@@ -194,7 +194,7 @@ master: master/CMakeFiles/master.dir/rule
 
 # fast build rule for target.
 master/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/build
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/build
 .PHONY : master/fast
 
 src/main.o: src/main.cpp.o
@@ -203,7 +203,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.o
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -212,7 +212,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.i
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -221,7 +221,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.s
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/master.dir/build.make master/CMakeFiles/master.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/xbox_controller_node.o: src/xbox_controller_node.cpp.o
@@ -230,7 +230,7 @@ src/xbox_controller_node.o: src/xbox_controller_node.cpp.o
 
 # target to build an object file
 src/xbox_controller_node.cpp.o:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.o
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.o
 .PHONY : src/xbox_controller_node.cpp.o
 
 src/xbox_controller_node.i: src/xbox_controller_node.cpp.i
@@ -239,7 +239,7 @@ src/xbox_controller_node.i: src/xbox_controller_node.cpp.i
 
 # target to preprocess a source file
 src/xbox_controller_node.cpp.i:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.i
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.i
 .PHONY : src/xbox_controller_node.cpp.i
 
 src/xbox_controller_node.s: src/xbox_controller_node.cpp.s
@@ -248,7 +248,7 @@ src/xbox_controller_node.s: src/xbox_controller_node.cpp.s
 
 # target to generate assembly for a file
 src/xbox_controller_node.cpp.s:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.s
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f master/CMakeFiles/xbox_controller_node.dir/build.make master/CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.s
 .PHONY : src/xbox_controller_node.cpp.s
 
 # Help Target
@@ -283,6 +283,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

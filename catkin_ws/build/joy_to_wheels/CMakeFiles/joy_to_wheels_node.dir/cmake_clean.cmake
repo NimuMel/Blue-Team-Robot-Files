@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/joy_to_wheels/joy_to_wheels_node"
-  "/home/ubuntu/catkin_ws/devel/lib/joy_to_wheels/joy_to_wheels_node.pdb"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/joy_to_wheels/joy_to_wheels_node"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/joy_to_wheels/joy_to_wheels_node.pdb"
   "CMakeFiles/joy_to_wheels_node.dir/src/joy_to_wheels.cpp.o"
 )
 

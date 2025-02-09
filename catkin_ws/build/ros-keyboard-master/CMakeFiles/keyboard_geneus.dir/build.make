@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/catkin_ws/build
+CMAKE_BINARY_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build
 
 # Utility rule file for keyboard_geneus.
 
@@ -63,10 +63,10 @@ ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/build: keyboard_geneus
 .PHONY : ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/build
 
 ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/clean:
-	cd /home/ubuntu/catkin_ws/build/ros-keyboard-master && $(CMAKE_COMMAND) -P CMakeFiles/keyboard_geneus.dir/cmake_clean.cmake
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/ros-keyboard-master && $(CMAKE_COMMAND) -P CMakeFiles/keyboard_geneus.dir/cmake_clean.cmake
 .PHONY : ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/clean
 
 ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/depend:
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/catkin_ws/src /home/ubuntu/catkin_ws/src/ros-keyboard-master /home/ubuntu/catkin_ws/build /home/ubuntu/catkin_ws/build/ros-keyboard-master /home/ubuntu/catkin_ws/build/ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/ros-keyboard-master /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/ros-keyboard-master /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ros-keyboard-master/CMakeFiles/keyboard_geneus.dir/depend
 

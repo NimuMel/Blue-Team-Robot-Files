@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/share/roseus/ros/keyboard/manifest.l"
-  "/home/ubuntu/catkin_ws/devel/share/roseus/ros/keyboard/msg/Key.l"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/share/roseus/ros/keyboard/manifest.l"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/share/roseus/ros/keyboard/msg/Key.l"
   "CMakeFiles/keyboard_generate_messages_eus"
 )
 

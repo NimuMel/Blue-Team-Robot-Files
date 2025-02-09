@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/catkin_ws/src/mobile_ik/src/mobile_ik_node.cpp
+/home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/mobile_ik/src/mobile_ik_node.cpp
 ros/ros.h
 -
 geometry_msgs/Vector3.h
@@ -301,8 +301,6 @@ ros/init.h
 /opt/ros/noetic/include/ros/ros/init.h
 common.h
 /opt/ros/noetic/include/ros/common.h
-boost/bind.hpp
--
 xmlrpcpp/XmlRpcValue.h
 -
 
@@ -347,7 +345,7 @@ ros/message.h
 /opt/ros/noetic/include/ros/ros/message.h
 ros/serialization.h
 /opt/ros/noetic/include/ros/ros/serialization.h
-boost/bind.hpp
+boost/bind/bind.hpp
 -
 boost/thread/mutex.hpp
 -

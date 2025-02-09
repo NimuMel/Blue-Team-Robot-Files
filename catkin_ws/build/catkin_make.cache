@@ -1,2 +1,2 @@
-joy_to_wheels:master:mobile_ik:omni_wheel_ik:pose_controller:pose_estimation:ros-keyboard-master
--DCATKIN_DEVEL_PREFIX=/home/ubuntu/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/catkin_ws/install -G Unix Makefiles
+imu_publisher:joy_to_wheels:master:mobile_ik:omni_wheel_ik:pose_controller:pose_estimation:ros-keyboard-master
+-DCATKIN_DEVEL_PREFIX=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/install -G Unix Makefiles

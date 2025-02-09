@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/catkin_ws/src/pose_controller
+# Install script for directory: /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/pose_controller
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controller.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controller.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pose_controller/cmake" TYPE FILE FILES
-    "/home/ubuntu/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controllerConfig.cmake"
-    "/home/ubuntu/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controllerConfig-version.cmake"
+    "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controllerConfig.cmake"
+    "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_controller/catkin_generated/installspace/pose_controllerConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pose_controller" TYPE FILE FILES "/home/ubuntu/catkin_ws/src/pose_controller/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pose_controller" TYPE FILE FILES "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/pose_controller/package.xml")
 endif()
 

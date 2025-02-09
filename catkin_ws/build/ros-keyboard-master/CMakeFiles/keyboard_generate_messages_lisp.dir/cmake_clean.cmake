@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/share/common-lisp/ros/keyboard/msg/Key.lisp"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/share/common-lisp/ros/keyboard/msg/Key.lisp"
   "CMakeFiles/keyboard_generate_messages_lisp"
 )
 

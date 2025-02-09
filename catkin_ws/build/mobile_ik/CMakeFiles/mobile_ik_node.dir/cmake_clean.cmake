@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/mobile_ik/mobile_ik_node"
-  "/home/ubuntu/catkin_ws/devel/lib/mobile_ik/mobile_ik_node.pdb"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/mobile_ik/mobile_ik_node"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/mobile_ik/mobile_ik_node.pdb"
   "CMakeFiles/mobile_ik_node.dir/src/mobile_ik_node.cpp.o"
 )
 

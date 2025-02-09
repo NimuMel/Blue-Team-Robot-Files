@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/catkin_ws/build
+CMAKE_BINARY_DIR = /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/catkin_ws/build/CMakeFiles /home/ubuntu/catkin_ws/build/pose_estimation/CMakeFiles/progress.marks
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/catkin_ws/build/CMakeFiles 0
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/CMakeFiles /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_estimation/CMakeFiles/progress.marks
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/clean
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/preinstall
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/preinstall
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 pose_estimation/CMakeFiles/pose_estimation_node.dir/rule:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/CMakeFiles/pose_estimation_node.dir/rule
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/CMakeFiles/pose_estimation_node.dir/rule
 .PHONY : pose_estimation/CMakeFiles/pose_estimation_node.dir/rule
 
 # Convenience name for target.
@@ -179,7 +179,7 @@ pose_estimation_node: pose_estimation/CMakeFiles/pose_estimation_node.dir/rule
 
 # fast build rule for target.
 pose_estimation_node/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/build
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/build
 .PHONY : pose_estimation_node/fast
 
 src/pose_estimation_node.o: src/pose_estimation_node.cpp.o
@@ -188,7 +188,7 @@ src/pose_estimation_node.o: src/pose_estimation_node.cpp.o
 
 # target to build an object file
 src/pose_estimation_node.cpp.o:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.o
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.o
 .PHONY : src/pose_estimation_node.cpp.o
 
 src/pose_estimation_node.i: src/pose_estimation_node.cpp.i
@@ -197,7 +197,7 @@ src/pose_estimation_node.i: src/pose_estimation_node.cpp.i
 
 # target to preprocess a source file
 src/pose_estimation_node.cpp.i:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.i
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.i
 .PHONY : src/pose_estimation_node.cpp.i
 
 src/pose_estimation_node.s: src/pose_estimation_node.cpp.s
@@ -206,7 +206,7 @@ src/pose_estimation_node.s: src/pose_estimation_node.cpp.s
 
 # target to generate assembly for a file
 src/pose_estimation_node.cpp.s:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.s
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/pose_estimation_node.dir/build.make pose_estimation/CMakeFiles/pose_estimation_node.dir/src/pose_estimation_node.cpp.s
 .PHONY : src/pose_estimation_node.cpp.s
 
 # Help Target
@@ -237,6 +237,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/ubuntu/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/catkin_ws/devel
+prefix=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel
 
 Name: joy_to_wheels
 Description: Description of joy_to_wheels

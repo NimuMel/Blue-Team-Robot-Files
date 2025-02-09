@@ -1,8 +1,8 @@
-prefix=/home/ubuntu/catkin_ws/devel
+prefix=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel
 
 Name: keyboard
 Description: Description of keyboard
 Version: 0.1.1
-Cflags: -I/home/ubuntu/catkin_ws/devel/include
+Cflags: -I/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/include
 Libs: -L${prefix}/lib 
 Requires: roscpp std_msgs message_runtime

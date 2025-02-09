@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/master/xbox_controller_node"
-  "/home/ubuntu/catkin_ws/devel/lib/master/xbox_controller_node.pdb"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/master/xbox_controller_node"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/master/xbox_controller_node.pdb"
   "CMakeFiles/xbox_controller_node.dir/src/xbox_controller_node.cpp.o"
 )
 

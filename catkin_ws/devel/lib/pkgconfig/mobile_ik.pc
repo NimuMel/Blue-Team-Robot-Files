@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/catkin_ws/devel
+prefix=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel
 
 Name: mobile_ik
 Description: Description of mobile_ik

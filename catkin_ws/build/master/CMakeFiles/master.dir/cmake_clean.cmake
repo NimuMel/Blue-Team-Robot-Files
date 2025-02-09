@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/master/master"
-  "/home/ubuntu/catkin_ws/devel/lib/master/master.pdb"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/master/master"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/master/master.pdb"
   "CMakeFiles/master.dir/src/main.cpp.o"
 )
 

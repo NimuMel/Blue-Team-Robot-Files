@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/python3/dist-packages/keyboard/msg/_Key.py"
-  "/home/ubuntu/catkin_ws/devel/lib/python3/dist-packages/keyboard/msg/__init__.py"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/python3/dist-packages/keyboard/msg/_Key.py"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/python3/dist-packages/keyboard/msg/__init__.py"
   "CMakeFiles/keyboard_generate_messages_py"
 )
 

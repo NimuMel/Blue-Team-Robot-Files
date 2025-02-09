@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/lib/pose_controller/pose_controller_node"
-  "/home/ubuntu/catkin_ws/devel/lib/pose_controller/pose_controller_node.pdb"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/pose_controller/pose_controller_node"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/lib/pose_controller/pose_controller_node.pdb"
   "CMakeFiles/pose_controller_node.dir/src/pose_controller_node.cpp.o"
 )
 

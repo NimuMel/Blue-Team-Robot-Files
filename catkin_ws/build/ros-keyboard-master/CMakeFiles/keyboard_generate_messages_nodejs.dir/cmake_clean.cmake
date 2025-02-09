@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/ubuntu/catkin_ws/devel/share/gennodejs/ros/keyboard/msg/Key.js"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel/share/gennodejs/ros/keyboard/msg/Key.js"
   "CMakeFiles/keyboard_generate_messages_nodejs"
 )
 

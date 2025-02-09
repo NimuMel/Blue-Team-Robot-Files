@@ -67,14 +67,14 @@ set(mobile_ik_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(mobile_ik_SOURCE_PREFIX /home/ubuntu/catkin_ws/src/mobile_ik)
-  set(mobile_ik_DEVEL_PREFIX /home/ubuntu/catkin_ws/devel)
+  set(mobile_ik_SOURCE_PREFIX /home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/mobile_ik)
+  set(mobile_ik_DEVEL_PREFIX /home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel)
   set(mobile_ik_INSTALL_PREFIX "")
   set(mobile_ik_PREFIX ${mobile_ik_DEVEL_PREFIX})
 else()
   set(mobile_ik_SOURCE_PREFIX "")
   set(mobile_ik_DEVEL_PREFIX "")
-  set(mobile_ik_INSTALL_PREFIX /home/ubuntu/catkin_ws/install)
+  set(mobile_ik_INSTALL_PREFIX /home/blue_team/Blue-Team-Robot-Files/catkin_ws/install)
   set(mobile_ik_PREFIX ${mobile_ik_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ubuntu/catkin_ws/install/lib;/opt/ros/noetic/lib)
+    foreach(path /home/blue_team/Blue-Team-Robot-Files/catkin_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

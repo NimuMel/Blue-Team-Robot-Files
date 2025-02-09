@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ubuntu/catkin_ws/src/joy_to_wheels/src/joy_to_wheels.cpp" "/home/ubuntu/catkin_ws/build/joy_to_wheels/CMakeFiles/joy_to_wheels_node.dir/src/joy_to_wheels.cpp.o"
+  "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/src/joy_to_wheels/src/joy_to_wheels.cpp" "/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/joy_to_wheels/CMakeFiles/joy_to_wheels_node.dir/src/joy_to_wheels.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
