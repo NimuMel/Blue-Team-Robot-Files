@@ -1,0 +1,42 @@
+<!-- omnibot.launch -->
+
+<launch>
+
+	<node pkg="tf" type="static_transform_publisher" name="static_tf_pub"
+		args=".15 .77 0 0 0 0 1 map start 100" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="oak_d_lite_static_tf" 
+		args="0.0 0.14 0.7 0 0 0 1 odom oak_d_lite" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0 0 0 0 1 odom base_link" />
+	<node pkg="tf2_ros" type="static_transform_publisher" name="oak_right_camera_optical_frame" 
+		args="0.2 0.0 0.3 -0.7071068 0 0 0.7071068 base_link oak_right_camera_optical_frame" />
+
+
+	<param name="kp_x" type="double" value="0.5" />
+	<param name="ki_x" type="double" value="0.0" />
+	<param name="kd_x" type="double" value="0.075" />
+
+	<!-- PID parameters for y-axis -->
+	<param name="kp_y" type="double" value="0.5" />
+	<param name="ki_y" type="double" value="0.0" />
+	<param name="kd_y" type="double" value="0.075" />
+
+	<!-- PID parameters for theta -->
+	<param name="kp_theta" type="double" value="1.0" />
+	<param name="ki_theta" type="double" value="0.0001" />
+	<param name="kd_theta" type="double" value="0.05" />
+
+	<!-- Argument for serial port -->
+	<arg name="port" default="/dev/ttyACM0" />
+
+	<!-- ROSSerial for communication with OpenCR -->
+	<node name= "rosserial_node" pkg="rosserial_arduino"  type="serial_node.py" output="screen">
+		<param name="port" value="$(arg port)" />
+		<param name="baud" value="921600" />
+	</node>
+
+	<node name="omni_wheel_ik" pkg="omnibot_control" type="omni_wheel_ik_node" output="screen"/>
+	<node name="pose_estimation" pkg="omnibot_control" type="pose_estimation_node" output="screen" />
+	<node name="pose_controller" pkg="omnibot_control" type="pose_controller_node" output="screen"/>
+
+
+</launch>

@@ -1,2 +1,2 @@
-joy_to_wheels:master:mobile_ik:omni_wheel_ik:pose_controller:pose_estimation:ros-keyboard-master
+omni_wheel_ik:omnibot_control:pose_controller:pose_estimation:waypoint_follower_cpp
 -DCATKIN_DEVEL_PREFIX=/home/ubuntu/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/catkin_ws/install -G Unix Makefiles

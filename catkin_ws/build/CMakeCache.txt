@@ -403,6 +403,12 @@ _gtest_INCLUDES:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _gtest_SOURCES:FILEPATH=/usr/src/gtest/src/gtest.cc
 
+//The directory containing a CMake configuration file for actionlib.
+actionlib_DIR:PATH=/opt/ros/noetic/share/actionlib/cmake
+
+//The directory containing a CMake configuration file for actionlib_msgs.
+actionlib_msgs_DIR:PATH=/opt/ros/noetic/share/actionlib_msgs/cmake
+
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/noetic/share/catkin/cmake
 
@@ -500,6 +506,9 @@ master_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/master
 //Value Computed by CMake
 master_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/master
 
+//The directory containing a CMake configuration file for message_filters.
+message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake
+
 //The directory containing a CMake configuration file for message_generation.
 message_generation_DIR:PATH=/opt/ros/noetic/share/message_generation/cmake
 
@@ -512,11 +521,20 @@ mobile_ik_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/mobile_ik
 //Value Computed by CMake
 mobile_ik_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/mobile_ik
 
+//The directory containing a CMake configuration file for nav_msgs.
+nav_msgs_DIR:PATH=/opt/ros/noetic/share/nav_msgs/cmake
+
 //Value Computed by CMake
 omni_wheel_ik_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/omni_wheel_ik
 
 //Value Computed by CMake
 omni_wheel_ik_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/omni_wheel_ik
+
+//Value Computed by CMake
+omnibot_control_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/omnibot_control
+
+//Value Computed by CMake
+omnibot_control_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/omnibot_control
 
 //Value Computed by CMake
 pose_controller_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/pose_controller
@@ -542,6 +560,9 @@ roscpp_serialization_DIR:PATH=/opt/ros/noetic/share/roscpp_serialization/cmake
 //The directory containing a CMake configuration file for roscpp_traits.
 roscpp_traits_DIR:PATH=/opt/ros/noetic/share/roscpp_traits/cmake
 
+//The directory containing a CMake configuration file for rosgraph.
+rosgraph_DIR:PATH=/opt/ros/noetic/share/rosgraph/cmake
+
 //The directory containing a CMake configuration file for rosgraph_msgs.
 rosgraph_msgs_DIR:PATH=/opt/ros/noetic/share/rosgraph_msgs/cmake
 
@@ -559,6 +580,33 @@ sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
+
+//The directory containing a CMake configuration file for tf2.
+tf2_DIR:PATH=/opt/ros/noetic/share/tf2/cmake
+
+//The directory containing a CMake configuration file for tf2_msgs.
+tf2_msgs_DIR:PATH=/opt/ros/noetic/share/tf2_msgs/cmake
+
+//The directory containing a CMake configuration file for tf2_py.
+tf2_py_DIR:PATH=/opt/ros/noetic/share/tf2_py/cmake
+
+//The directory containing a CMake configuration file for tf2_ros.
+tf2_ros_DIR:PATH=/opt/ros/noetic/share/tf2_ros/cmake
+
+//The directory containing a CMake configuration file for tf.
+tf_DIR:PATH=/opt/ros/noetic/share/tf/cmake
+
+//Value Computed by CMake
+waypoint_follower_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/waypoint_follower
+
+//Value Computed by CMake
+waypoint_follower_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/waypoint_follower
+
+//Value Computed by CMake
+waypoint_follower_cpp_BINARY_DIR:STATIC=/home/ubuntu/catkin_ws/build/waypoint_follower_cpp
+
+//Value Computed by CMake
+waypoint_follower_cpp_SOURCE_DIR:STATIC=/home/ubuntu/catkin_ws/src/waypoint_follower_cpp
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/noetic/share/xmlrpcpp/cmake
@@ -711,7 +759,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=11
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=9
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
