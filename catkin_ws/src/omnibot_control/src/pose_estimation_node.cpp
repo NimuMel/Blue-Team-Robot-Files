@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <std_msgs/Float32.h>
+#include <sensor_msgs/Imu.h>
 #include <geometry_msgs/Pose2D.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <vector>
@@ -7,14 +8,14 @@
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
 
-#define ALPHA 0.98
+#define ALPHA 0.95
 #define BETA 0.99999
 #define IMU_AVG 15
 // Robot-specific constants
 const float WHEEL_RADIUS = 0.054 / 2;  // Wheel radius in meters
 const float ROBOT_RADIUS = 0.24 / 2;   // Robot radius in meters
 const float TWO_PI = 2.0 * M_PI;
-#define HZ 30
+#define HZ 50
 const float DT = 1.0/HZ;  // Time step (assumes 50 Hz update rate)
 
 // Global pose
@@ -26,6 +27,7 @@ std::vector<double> previous_encoder_values(4, 0.0);
 std::vector<double> current_encoder_values(4, 0.0);
 
 bool is_initialized = false;
+bool is_initialized_imu = false;
 
 float imu_yaw = 0;
 float imu_yaw_speed = 0;
@@ -40,6 +42,8 @@ float imu_avg = 0;
 int imu_num_dat = 0;
 float imu_yaw_avg[IMU_AVG];
 ros::Time current_time;
+
+
 
 // Callback functions for each encoder
 void encoder1Callback(const std_msgs::Float32::ConstPtr& msg) {
@@ -57,17 +61,49 @@ void encoder3Callback(const std_msgs::Float32::ConstPtr& msg) {
 void encoder4Callback(const std_msgs::Float32::ConstPtr& msg) {
   current_encoder_values[3] = msg->data;
 }
-void imuCallback(const std_msgs::Float32::ConstPtr& msg) {
-	 float imu_raw = (float)msg->data * 0.01745; // Convert to radians
+std::vector<double> a_coeffs_ = {1.0, -1.1430, 0.4652};;
+std::vector<double> b_coeffs_= {0.0675, 0.0, -0.0675};;
+std::vector<double> z_states_= {0.0, 0.0};;
+double gyro_z;
+double filtered_z;
+float imu_theta = 0.0;
+double applyBandPassFilter(double input, std::vector<double>& states)
+{
+	// Apply the difference equation of the IIR filter
+	double output = b_coeffs_[0] * input + states[0];
 
-    // Apply High-Pass Filter (removes drift)
-    imu_yaw_filtered = .999 * (imu_yaw_filtered + imu_raw - prev_imu_yaw);
-     prev_imu_yaw = imu_raw;
-    // Apply Low-Pass Filter (removes high-frequency noise)
-	imu_yaw_bandpassed = BETA * imu_yaw_bandpassed + (1 - BETA) * imu_yaw_filtered;
-  
-    imu_yaw = imu_raw; // Final band-passed IMU yaw
-	ROS_INFO("IMU Raw: %.4f rad, IMU Filtered: %.4f rad", imu_raw, imu_yaw);
+	// Update states
+	states[0] = b_coeffs_[1] * input - a_coeffs_[1] * output + states[1];
+	states[1] = b_coeffs_[2] * input - a_coeffs_[2] * output;
+
+	return output;
+}
+void imuCallback(const sensor_msgs::Imu::ConstPtr& msg) {
+    // Extract the quaternion from the IMU message
+    tf::Quaternion quat(
+        msg->orientation.x,
+        msg->orientation.y,
+        msg->orientation.z,
+        msg->orientation.w
+    );
+
+    // Convert the quaternion to roll, pitch, and yaw
+    double roll, pitch, yaw;
+    tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+	
+	double filtered_yaw = applyBandPassFilter(yaw, z_states_);
+	imu_theta = yaw - imu_offset;
+	imu_theta = atan2(sin(imu_theta), cos(imu_theta));
+    // Update imu_theta with the yaw angle
+	if (!is_initialized_imu) {
+	  imu_offset = imu_theta;
+	  is_initialized_imu =true;
+    }
+	
+    //If you need to apply filtering to the yaw angle, you can do it here
+    //Example:
+    //Optionally, log the yaw angle for debugging
+    ROS_INFO("Yaw Angle: %.4f", imu_theta);
 }
 
 
@@ -76,8 +112,7 @@ void calculatePose(ros::Publisher& pose_pub, ros::Publisher& odom_pub) {
   current_time = ros::Time::now();
   if (!is_initialized) {
     previous_encoder_values = current_encoder_values;
-	prev_imu_yaw_filtered = imu_yaw_bandpassed;
-	imu_offset = imu_yaw;
+	//imu_offset = imu_yaw;
     is_initialized = true;
     ROS_INFO("Pose estimation initialized with encoder values.");
   }
@@ -102,17 +137,15 @@ void calculatePose(ros::Publisher& pose_pub, ros::Publisher& odom_pub) {
     Vy = ((WHEEL_RADIUS * sqrt(2)) / 4.0) * ( wheel_speeds[0] - wheel_speeds[1] - wheel_speeds[2] + wheel_speeds[3] );
     omega = -1*(WHEEL_RADIUS / (4.0 *ROBOT_RADIUS )) * (wheel_speeds[0] + wheel_speeds[1] + wheel_speeds[2] + wheel_speeds[3] );
 	
+	double odom_theta = robot_pose.theta + omega * DT;
 	
   // Update robot pose
   robot_pose.x += Vx * DT * cos(robot_pose.theta) - Vy * DT * sin(robot_pose.theta);
   robot_pose.y += Vx * DT * sin(robot_pose.theta) + Vy * DT * cos(robot_pose.theta);
-  robot_pose.theta += ALPHA * (omega * DT) + (1 - ALPHA) * (imu_yaw - imu_offset);
-
+  robot_pose.theta = ALPHA * (odom_theta) + (1 - ALPHA) * imu_theta;
+  //ROS_INFO(" ODOM: %.f     IMU: %.f",odom_theta,imu_theta);
   // Normalize theta to [-pi, pi]
-  if (robot_pose.theta > M_PI)
-    robot_pose.theta -= TWO_PI;
-  if (robot_pose.theta < -M_PI)
-    robot_pose.theta += TWO_PI;
+  robot_pose.theta = atan2(sin(robot_pose.theta), cos(robot_pose.theta));
 
   odom_quat = tf::createQuaternionMsgFromYaw(robot_pose.theta);
 
@@ -194,7 +227,7 @@ int main(int argc, char** argv) {
     ros::Subscriber encoder4_sub = nh.subscribe("/enc/motor4_encoder", 10, encoder4Callback);
 	
 	//add sub for imu yaw
-	ros::Subscriber imu_sub_ = nh.subscribe("/imu/yaw", 10, imuCallback);
+	ros::Subscriber imu_sub_ = nh.subscribe("/imu/data_raw", 10, imuCallback);
   // Instantiate Transform Broadcasters
     tf::TransformBroadcaster odom_broadcaster;
     tf::TransformBroadcaster pose_broadcaster;
@@ -209,6 +242,7 @@ int main(int argc, char** argv) {
   while (ros::ok()) {
    if (!is_initialized) {
       sleep(5);
+	  
     }
     ros::spinOnce();
     calculatePose(pose_pub, odom_pub);

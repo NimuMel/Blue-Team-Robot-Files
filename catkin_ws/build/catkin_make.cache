@@ -1,2 +1,2 @@
-omni_wheel_ik:omnibot_control:pose_controller:pose_estimation:waypoint_follower_cpp
+omnibot_control:waypoint_follower_cpp
 -DCATKIN_DEVEL_PREFIX=/home/ubuntu/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/catkin_ws/install -G Unix Makefiles

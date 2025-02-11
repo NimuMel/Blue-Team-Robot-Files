@@ -131,10 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/ubuntu/catkin_ws/build/gtest/cmake_install.cmake")
-  include("/home/ubuntu/catkin_ws/build/pose_controller/cmake_install.cmake")
-  include("/home/ubuntu/catkin_ws/build/omni_wheel_ik/cmake_install.cmake")
   include("/home/ubuntu/catkin_ws/build/omnibot_control/cmake_install.cmake")
-  include("/home/ubuntu/catkin_ws/build/pose_estimation/cmake_install.cmake")
   include("/home/ubuntu/catkin_ws/build/waypoint_follower_cpp/cmake_install.cmake")
 
 endif()

@@ -3,26 +3,57 @@
 
 #include "macros.h"
 #include"ros_functions.h"
+// Structures to hold each motor's state
+typedef struct {
+  int position;
+  unsigned long waitTime;  // in milliseconds
+} PositionCommand;
 
-// External variables used in the functions
-extern int32_t tilt_home;
-extern int32_t sort_pos;
-extern int32_t tilt_pos;
+// Update the MotorState struct to include waiting variables
+typedef struct {
+  PositionCommand positionQueue[QUEUE_SIZE];
+  int queueHead;
+  int queueTail;
+  int32_t desired_position;
+  int32_t current_position;
+  bool isMoving;
+  bool isWaiting;          // Indicates if the motor is in waiting state
+  unsigned long waitStartTime; // When the waiting started
+  unsigned long waitTime; 
+} MotorState;
 
 // Function declarations
-void setupDynWheels();
-void autoHome(uint8_t motor_id);
-void autoHomeScoop();
+void intiDyn();
+void initMotor(uint8_t motor_id, uint8_t control_mode);
+void setMode(uint8_t motor_id, uint8_t control_mode);
 void sortInit();
-void sortLeft();
-void sortRight();
-void tiltUp();
-void tiltDown();
+void setupWheels();
+void status();
+void homeAll();
+void initSort();
+bool detectOre();
+bool detectMag();
+
+void updateMotors();
+void initMotorQueue();
+void addPositionToQueue(uint8_t motor_id, int position, unsigned long waitTime);
+void addPositionToQueue(uint8_t motor_id, int position);
+bool isQueueEmpty(int motor_index);
+PositionCommand dequeue(int motor_index);
+
+void setPos(uint8_t motor_id, int position);
+void getPos(uint8_t motor_id, int32_t &pos);
+bool reachedGoal(int motor_index);
+
+
+
+
+void stateMachine();
+
+
 void scoopUp();
-void scoopDown();
-void autoHomeDump();
-void dumpUp();
-void dumpDown();
+
+
 
 
 #endif // MOTOR_FUNCTIONS_H

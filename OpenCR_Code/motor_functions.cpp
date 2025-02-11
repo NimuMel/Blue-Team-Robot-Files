@@ -2,91 +2,47 @@
 #include "ros_functions.h"
 #include "macros.h"
 
-int32_t tilt_home = 0;
-int32_t sort_pos = 0;
-int32_t tilt_pos = 0;
-
-int32_t scoop_home_7 = 0;
-int32_t scoop_home_8 = 0;
-
-int32_t dump_1_home = 0;
-
-
-extern ros::NodeHandle nh;
-extern DynamixelWorkbench dxl_wb;  // Defined elsewhere in your program
+#define PORT "/dev/ttyACM0"
+#define WHEEL_ACC 20
 
 
 
-void setupDynWheels() {
 
-  //Local Variables for Error checking
-  bool result = false;
+
+int ore_count = 0;
+bool mag_detected = false;
+
+
+unsigned long current_time;
+unsigned long start_time;
+
+// Arrays to store motor IDs (from 1 to 10)
+uint8_t motor_ids[NUMBER_OF_MOTORS] = {5, 6, 7, 8, 9, 10};
+
+ // Duration to wait after reaching position// Array to hold the state of each motor
+MotorState motors[NUMBER_OF_MOTORS];
+
+
+
+
+void intiDyn() {
   const char* log;
-
   // Initialize Dynamixel DEVICE_NAME
-  result = dxl_wb.init("/dev/ttyACM0", BAUDRATE, &log);
-  if (!result) {
+  if (!dxl_wb.init(PORT, BAUDRATE, &log)) {
     Serial.println("Failed to initialize Dynamixel");
     Serial.println(log);
-    return;
   }
   Serial.println("Dynamixel Workbench initialized");
 
   // Set to Protocol 2.0
   dxl_wb.setPacketHandler(2.0);  // Use Protocol 2.0
-
-  // Ping all motors and set them to velocity control mode
-  uint16_t model_number = 0;
-  uint8_t motor_ids[] = MOTOR_IDS;  // Motor IDs
-  for (int i = 0; i < 4; i++) {
-    delay(10);
-    uint8_t motor_id = motor_ids[i];
-    result = dxl_wb.ping(motor_id, &model_number, &log);
-    if (!result) {
-      Serial.print("Failed to ping motor ");
-      Serial.print(motor_id);
-      Serial.println(log);
-      continue;  // Skip to the next motor
-    }
-    Serial.print("Motor ");
-    Serial.print(motor_id);
-    Serial.print(" pinged successfully. Model Number: ");
-    Serial.println(model_number);
-    delay(10);
-    // Set the motor to Velocity Control Mode
-    //ACCELERATION_MODE VELOCITY_CONTROL_MODE
-    result = dxl_wb.setOperatingMode(motor_id, VELOCITY_CONTROL_MODE, &log);
-    if (!result) {
-      Serial.print("Failed to set velocity control mode for motor ");
-      Serial.print(motor_id);
-      Serial.println(log);
-      continue;  // Skip to the next motor
-    }
-    Serial.print("Motor ");
-    Serial.print(motor_id);
-    Serial.println(" velocity control mode set successfully");
-    delay(10);
-    // Enable torque for the motor
-    result = dxl_wb.torqueOn(motor_id, &log);
-    if (!result) {
-      Serial.print("Failed to enable torque for motor ");
-      Serial.print(motor_id);
-      Serial.println(log);
-      continue;  // Skip to the next motor
-    }
-    Serial.print("Torque enabled for motor ");
-    Serial.println(motor_id);
-  }
 }
 
-void sortInit() {
-  uint8_t motor_id = 6;
-  bool result = false;
-  const char* log;
+void initMotor(uint8_t motor_id, uint8_t control_mode) {
   uint16_t model_number = 0;
-  //Ping to see if connected
-  result = dxl_wb.ping(motor_id, &model_number, &log);
-  if (!result) {
+  const char* log;
+  dxl_wb.ping(motor_id, &model_number, &log);
+  if (!dxl_wb.ping(motor_id, &model_number, &log)) {
     Serial.print("Failed to ping motor ");
     Serial.print(motor_id);
     Serial.println(log);
@@ -95,454 +51,334 @@ void sortInit() {
   Serial.print(motor_id);
   Serial.print(" pinged successfully. Model Number: ");
   Serial.println(model_number);
-  result = dxl_wb.setOperatingMode(motor_id, EXT_POSITION_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity control mode for motor ");
+  setMode(motor_id, control_mode);
+}
+void setMode(uint8_t motor_id, uint8_t control_mode) {
+  const char* log;
+  if (!dxl_wb.torqueOff(motor_id)) {
+    Serial.print("Failed to disable torque for motor");
+    Serial.print(motor_id);
+    Serial.print(": ");
+    Serial.println(log);
+    return;
+  }
+  if (!dxl_wb.setOperatingMode(motor_id, control_mode, &log)) {
+    Serial.print("Failed to set control mode for motor ");
     Serial.print(motor_id);
     Serial.println(log);
   }
-  dxl_wb.itemWrite(motor_id, "Profile_Velocity", 0);
-  dxl_wb.itemWrite(motor_id, "Profile_Acceleration", 0);
-  result = dxl_wb.torqueOn(motor_id, &log);
-  if (!result) {
+  Serial.print("Motor ");
+  Serial.print(motor_id);
+  switch (control_mode) {
+    case 0:
+      Serial.println(" set to ACCELERATION_MODE");
+      break;
+    case 1:
+      Serial.println(" set to VELOCITY_CONTROL_MODE");
+      break;
+    case 3:
+      Serial.println(" set to POSITION_CONTROL_MODE");
+      break;
+    case 4:
+      Serial.println(" set to EXT_POSITION_CONTROL_MODE");
+      break;
+  }
+  if (!dxl_wb.torqueOn(motor_id, &log)) {
     Serial.print("Failed to enable torque for motor ");
     Serial.print(motor_id);
     Serial.println(log);
   }
   Serial.print("Torque enabled for motor ");
   Serial.println(motor_id);
-  result = dxl_wb.goalPosition(motor_id, 1022);  // Center
-  if (!result) {
+}
+void sortInit() {
+  const char* log;
+  initMotor(DXL_SORT, EXT_POSITION_CONTROL_MODE);
+  dxl_wb.itemWrite(DXL_SORT, "Profile_Velocity", 0);
+  dxl_wb.itemWrite(DXL_SORT, "Profile_Acceleration", 0);
+  // Center
+  if (!dxl_wb.goalPosition(DXL_SORT, 1022)) {
     Serial.print("Failed to set Position: ");
-    Serial.print(motor_id);
+    Serial.print(DXL_SORT);
     Serial.println(log);
   }
 }
 
-void autoHome(uint8_t motor_id) {
-  //This function will home the all of the sort mechanisms
-  bool result = false;
-  const char* log;
-  uint16_t model_number = 0;
-  //Ping to see if connected
-  result = dxl_wb.ping(motor_id, &model_number, &log);
-  if (!result) {
-    Serial.print("Failed to ping motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
+
+void setupWheels() {
+  uint8_t motor_ids[] = MOTOR_IDS;  // Motor IDs
+  for (int i = 0; i < 4; i++) {
+    initMotor(motor_ids[i], VELOCITY_CONTROL_MODE);
+     dxl_wb.itemWrite(motor_ids[i], "Profile_Acceleration", WHEEL_ACC);
   }
+}
 
-  //Set the mode to velocity control for homing
-  result = dxl_wb.setOperatingMode(motor_id, VELOCITY_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity control mode for motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
+void status() {
+}
 
-  result = dxl_wb.torqueOn(motor_id, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
+void homeAll(){
+	addPositionToQueue(DXL_TILT,TILT_DOWN_POS);
+	addPositionToQueue(DXL_SORT,SORT_CENTER);
+	addPositionToQueue(DXL_DUMP_R,DUMP_R_DOWN_POS);
+	addPositionToQueue(DXL_DUMP_L,DUMP_L_DOWN_POS);
+	addPositionToQueue(DXL_SCOOP_R,SCOOP_DOWN_POS);
+	addPositionToQueue(DXL_SCOOP_L,SCOOP_DOWN_POS);
+}
+void initSort(){
+  initMotor(DXL_TILT,EXT_POSITION_CONTROL_MODE);
+  initMotor(DXL_SCOOP_L,EXT_POSITION_CONTROL_MODE);
+  initMotor(DXL_SCOOP_R,EXT_POSITION_CONTROL_MODE);
+  initMotor(DXL_DUMP_L,EXT_POSITION_CONTROL_MODE);
+  initMotor(DXL_DUMP_R,EXT_POSITION_CONTROL_MODE);
+  initMotor(DXL_SORT,EXT_POSITION_CONTROL_MODE);
+}
 
-  result = dxl_wb.goalSpeed(motor_id, (int32_t)HOMING_VELOCITY, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
+bool detectOre() {  //use part present Sensor to see if we detect a pice and move to detect state
+  ore_count += 1;
+  return true;
+}
+bool detectMag() {
+  return false;
+}
+void updateMotors() {
+  for (int i = 0; i < NUMBER_OF_MOTORS; i++) {
+    uint8_t motor_id = motor_ids[i];
+    MotorState &motor = motors[i];
 
-  Serial.println("Homing started");
-
-  while (true) {
-    int32_t present_load = 0;
-
-    result = dxl_wb.itemRead(motor_id, "Present_Load", &present_load, &log);
-    Serial.print("Present load:");
-    Serial.println(present_load);
-    if (!result) {
-      Serial.print("Failed to get Present Load");
-      Serial.print(motor_id);
-      Serial.println(log);
+    // If not moving and not waiting, and there's a position in the queue, start moving
+    if (!motor.isMoving && !motor.isWaiting && !isQueueEmpty(i)) {
+      PositionCommand cmd = dequeue(i);
+      if (cmd.position != -1) { // Check for error
+        motor.desired_position = cmd.position;
+        motor.waitTime = cmd.waitTime;
+        setPos(motor_id, cmd.position);
+        motor.isMoving = true;
+        Serial.print("Motor ");
+        Serial.print(motor_id);
+        Serial.print(" moving to position: ");
+        Serial.println(cmd.position);
+      }
     }
-    // Check if the load exceeds the threshold
-    if (abs(present_load) > LOAD_THRESHOLD) {
-      Serial.println("Load threshold reached. Stopping homing.");
+
+    // If moving, check if the motor has reached its desired position
+    if (motor.isMoving) {
+      if (reachedGoal(i)) {
+        Serial.print("Motor ");
+        Serial.print(motor_id);
+        Serial.print(" reached position: ");
+        Serial.println(motor.desired_position);
+        motor.isMoving = false;   // Movement complete
+
+        // Start waiting if wait time is greater than 0
+        if (motor.waitTime > 0) {
+          motor.isWaiting = true;
+          motor.waitStartTime = millis();
+          Serial.print("Motor ");
+          Serial.print(motor_id);
+          Serial.print(" waiting for ");
+          Serial.print(motor.waitTime);
+          Serial.println(" ms");
+        }
+      } else {
+        Serial.print("Motor ");
+        Serial.print(motor_id);
+        Serial.print(" current position: ");
+        Serial.println(motor.current_position);
+      }
+    }
+
+    // If waiting, check if the wait time has elapsed
+    if (motor.isWaiting) {
+      unsigned long elapsed = millis() - motor.waitStartTime;
+      if (elapsed >= motor.waitTime) {
+        motor.isWaiting = false;
+        Serial.print("Motor ");
+        Serial.print(motor_id);
+        Serial.println(" wait time elapsed");
+      }
+    }
+  }
+}
+
+void initMotorQueue() {
+  for (int i = 0; i < NUMBER_OF_MOTORS; i++) {
+    motors[i].queueHead = 0;
+    motors[i].queueTail = 0;
+    motors[i].desired_position = 0;
+    motors[i].current_position = 0;
+    motors[i].isMoving = false;
+    motors[i].isWaiting = false;
+    motors[i].waitStartTime = 0;
+    motors[i].waitTime = 0;
+  }
+}
+
+// Function to add a desired position and wait time to a motor's queue
+void addPositionToQueue(uint8_t motor_id, int position, unsigned long waitTime) {
+  int motor_index = motor_id - 5; // Motor IDs 5-10 correspond to indices 0-5
+  if (motor_index < 0 || motor_index >= NUMBER_OF_MOTORS) {
+    Serial.print("Invalid motor ID: ");
+    Serial.println(motor_id);
+    return;
+  }
+  MotorState &motor = motors[motor_index];
+  if ((motor.queueTail + 1) % QUEUE_SIZE != motor.queueHead) { // Check if the queue is not full
+    motor.positionQueue[motor.queueTail].position = position;
+    motor.positionQueue[motor.queueTail].waitTime = waitTime;
+    motor.queueTail = (motor.queueTail + 1) % QUEUE_SIZE;
+    Serial.print("Added position ");
+    Serial.print(position);
+    Serial.print(" with wait time ");
+    Serial.print(waitTime);
+    Serial.print(" ms to motor ");
+    Serial.println(motor_id);
+  } else {
+    Serial.print("Position queue for motor ");
+    Serial.print(motor_id);
+    Serial.println(" is full!");
+  }
+}
+void addPositionToQueue(uint8_t motor_id, int position){
+	addPositionToQueue(motor_id,position,0);
+}
+
+// Function to check if the queue is empty
+bool isQueueEmpty(int motor_index) {
+  MotorState &motor = motors[motor_index];
+  return (motor.queueHead == motor.queueTail) && !motor.isWaiting;
+}
+
+// Function to dequeue the next position command
+PositionCommand dequeue(int motor_index) {
+  MotorState &motor = motors[motor_index];
+  PositionCommand cmd = {-1, 0}; // Default command indicating an error
+  if (!isQueueEmpty(motor_index)) {
+    cmd = motor.positionQueue[motor.queueHead];
+    motor.queueHead = (motor.queueHead + 1) % QUEUE_SIZE;
+  } else {
+    Serial.print("Position queue for motor ");
+    Serial.print(motor_ids[motor_index]);
+    Serial.println(" is empty!");
+  }
+  return cmd;
+}
+
+// Function to set the motor position
+void setPos(uint8_t motor_id, int position) {
+  const char* log;
+
+  // Replace this with your actual code to set the motor position
+  // For example:
+  if (!dxl_wb.goalPosition(motor_id, position)) {
+    Serial.print("Failed to set position for motor ");
+    Serial.print(motor_id);
+    Serial.print(": ");
+    Serial.println(log);
+  } else {
+    int motor_index = motor_id - 5;
+    if (motor_index >= 0 && motor_index < NUMBER_OF_MOTORS) {
+      motors[motor_index].desired_position = position;
+    }
+  }
+}
+
+// Function to get the motor position
+void getPos(uint8_t motor_id, int32_t &pos) {
+  const char* log;
+  // Replace this with your actual code to get the motor position
+  // For example:
+  if (!dxl_wb.itemRead(motor_id, "Present_Position", &pos, &log)) {
+    Serial.print("Failed to get position for motor ");
+    Serial.print(motor_id);
+    Serial.print(": ");
+    Serial.println(log);
+  }
+}
+
+// Function to check if the motor has reached its goal
+bool reachedGoal(int motor_index) {
+  uint8_t motor_id = motor_ids[motor_index];
+  MotorState &motor = motors[motor_index];
+  getPos(motor_id, motor.current_position);
+  if (abs(motor.desired_position - motor.current_position) <= POSITION_THRESHOLD) {
+    return true;
+  }
+  return false;
+}
+
+void scoopUp(){
+	addPositionToQueue(DXL_TILT,TILT_DOWN_POS);
+	addPositionToQueue(DXL_SCOOP_R,SCOOP_UP_POS,800);
+	addPositionToQueue(DXL_SCOOP_L,-SCOOP_UP_POS,800);
+	addPositionToQueue(DXL_SCOOP_R,SCOOP_DOWN_POS);
+	addPositionToQueue(DXL_SCOOP_L,SCOOP_DOWN_POS);
+	
+	
+	addPositionToQueue(DXL_TILT,TILT_UP_POS);
+	addPositionToQueue(DXL_SORT,SORT_NEB);
+	addPositionToQueue(DXL_SORT,SORT_CENTER);
+	
+}
+int scoopUpStage = 6;
+void stateMachine(){
+	switch (scoopUpStage) {
+    case 0:
+	  pubScoopDone(false);
+      addPositionToQueue(DXL_TILT, TILT_DOWN_POS);
+      scoopUpStage++;
       break;
-    }
-  }
-  // Stop the motor by setting the velocity to zero
-  result = dxl_wb.goalSpeed(motor_id, 0, &log);
-  if (!result) {
-    Serial.print("Failed to stop motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-  }
-
-  // Read the current position after homing
-
-  result = dxl_wb.itemRead(motor_id, "Present_Position", &tilt_home, &log);
-  if (!result) {
-    Serial.print("Failed to read Present Position for motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  dxl_wb.torqueOff(motor_id);
-  result = dxl_wb.setOperatingMode(motor_id, EXT_POSITION_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set Extended Position Control Mode for motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  Serial.print("Homing complete. Current position: ");
-  Serial.println(tilt_home);
-
-  result = dxl_wb.torqueOn(motor_id, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-}
-
-void autoHomeScoop() {
-  int motor_7 = 7;
-  int motor_8 = 8;
-  bool result = false;
-  const char* log;
-  uint16_t model_number = 0;
-  Serial.println("Scoop Homing");
-
-  //Ping to see if connected
-  result = dxl_wb.ping(motor_7, &model_number, &log);
-  if (!result) {
-    Serial.print("Failed to ping motor ");
-    Serial.print(motor_7);
-    Serial.println(log);
-  }
-  result = dxl_wb.ping(motor_8, &model_number, &log);
-  if (!result) {
-    Serial.print("Failed to ping motor ");
-    Serial.print(motor_8);
-    Serial.println(log);
-  }
-
-
-  //Set the mode to velocity control for homing
-  result = dxl_wb.setOperatingMode(motor_7, VELOCITY_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity control mode for motor ");
-    Serial.print(motor_7);
-    Serial.println(log);
-  }
-  result = dxl_wb.setOperatingMode(motor_8, VELOCITY_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity control mode for motor ");
-    Serial.print(motor_8);
-    Serial.println(log);
-  }
-
-
-  //Set torque to on for Homing
-  result = dxl_wb.torqueOn(motor_7, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_7);
-    Serial.println(log);
-  }
-  result = dxl_wb.torqueOn(motor_8, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_8);
-    Serial.println(log);
-  }
-
-  result = dxl_wb.goalSpeed(motor_7, -(int32_t)HOMING_VELOCITY, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity: ");
-    Serial.print(motor_7);
-    Serial.println(log);
-  }
-  result = dxl_wb.goalSpeed(motor_8, (int32_t)HOMING_VELOCITY, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity: ");
-    Serial.print(motor_8);
-    Serial.println(log);
-  }
-  // Homing While loop
-  while (true) {
-    int32_t present_load_7 = 0;
-    int32_t present_load_8 = 0;
-
-    //result = dxl_wb.itemRead(motor_7, "Present_Load", &present_load_7, &log);
-    Serial.print("Present load 7:");
-    Serial.println(present_load_7);
-    if (!result) {
-      Serial.print("Failed to get Present Load");
-      Serial.print(motor_7);
-      Serial.println(log);
-    }
-    result = dxl_wb.itemRead(motor_8, "Present_Load", &present_load_8, &log);
-    Serial.print("Present load 8:");
-    Serial.println(present_load_8);
-    if (!result) {
-      Serial.print("Failed to get Present Load");
-      Serial.print(motor_8);
-      Serial.println(log);
-    }
-    // Check if the load exceeds the threshold
-    if (abs(present_load_7) > LOAD_THRESHOLD || abs(present_load_8) > LOAD_THRESHOLD) {
-      Serial.println("Load threshold reached for scoop. Stopping homing.");
+    case 1:
+	  if(isQueueEmpty(DXL_TILT-5)){
+      addPositionToQueue(DXL_SCOOP_R, SCOOP_UP_POS, 800);
+      addPositionToQueue(DXL_SCOOP_L, -SCOOP_UP_POS, 800);
+      scoopUpStage++;
+	  }
       break;
-    }
-  }
-
-
-  // Stop the motor by setting the velocity to zero
-  result = dxl_wb.goalSpeed(motor_7, 0, &log);
-  if (!result) {
-    Serial.print("Failed to stop motor ");
-    Serial.print(motor_7);
-    Serial.print(": ");
-    Serial.println(log);
-  }
-  result = dxl_wb.goalSpeed(motor_8, 0, &log);
-  if (!result) {
-    Serial.print("Failed to stop motor ");
-    Serial.print(motor_8);
-    Serial.print(": ");
-    Serial.println(log);
-  }
-
-
-  // Read the current position after homing
-  result = dxl_wb.itemRead(motor_7, "Present_Position", &scoop_home_7, &log);
-  if (!result) {
-    Serial.print("Failed to read Present Position for motor ");
-    Serial.print(motor_7);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  result = dxl_wb.itemRead(motor_8, "Present_Position", &scoop_home_8, &log);
-  if (!result) {
-    Serial.print("Failed to read Present Position for motor ");
-    Serial.print(motor_8);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  Serial.print("Homing complete. Current position: ");
-  Serial.println(scoop_home_7);
-  Serial.print("Homing complete. Current position: ");
-  Serial.println(scoop_home_8);
-
-  dxl_wb.torqueOff(motor_7);
-  dxl_wb.torqueOff(motor_8);
-  result = dxl_wb.setOperatingMode(motor_7, EXT_POSITION_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set Extended Position Control Mode for motor ");
-    Serial.print(motor_7);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  result = dxl_wb.setOperatingMode(motor_8, EXT_POSITION_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set Extended Position Control Mode for motor ");
-    Serial.print(motor_8);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-
-
-  result = dxl_wb.torqueOn(motor_7, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_7);
-    Serial.println(log);
-  }
-  result = dxl_wb.torqueOn(motor_8, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_8);
-    Serial.println(log);
-  }
-}
-
-void autoHomeDump() {
-  //This function will home the all of the sort mechanisms
-  bool result = false;
-  const char* log;
-  uint16_t model_number = 0;
-  int motor_id = 10;
-  //Ping to see if connected
-  result = dxl_wb.ping(motor_id, &model_number, &log);
-  if (!result) {
-    Serial.print("Failed to ping motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-
-  //Set the mode to velocity control for homing
-  result = dxl_wb.setOperatingMode(motor_id, VELOCITY_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity control mode for motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-
-  result = dxl_wb.torqueOn(motor_id, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-
-  result = dxl_wb.goalSpeed(motor_id, (int32_t)HOMING_VELOCITY, &log);
-  if (!result) {
-    Serial.print("Failed to set velocity: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-
-  Serial.println("Homing started");
-
-  while (true) {
-    int32_t present_load = 0;
-
-    result = dxl_wb.itemRead(motor_id, "Present_Current", &present_load, &log);
-    Serial.print("Present load:");
-    Serial.println(present_load);
-    if (!result) {
-      Serial.print("Failed to get Present Load");
-      Serial.print(motor_id);
-      Serial.println(log);
-    }
-    // Check if the load exceeds the threshold
-    if (abs(present_load) > 300) {
-      Serial.println("Load threshold reached. Stopping homing.");
+    case 2:
+      if (isQueueEmpty(DXL_SCOOP_R-5) && isQueueEmpty(DXL_SCOOP_L-5)) {
+        addPositionToQueue(DXL_SCOOP_R, SCOOP_DOWN_POS);
+        addPositionToQueue(DXL_SCOOP_L, SCOOP_DOWN_POS);
+        scoopUpStage++;
+      }
       break;
-    }
-  }
-  // Stop the motor by setting the velocity to zero
-  result = dxl_wb.goalSpeed(motor_id, 0, &log);
-  if (!result) {
-    Serial.print("Failed to stop motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-  }
-
-  // Read the current position after homing
-
-  result = dxl_wb.itemRead(motor_id, "Present_Position", &dump_1_home, &log);
-  if (!result) {
-    Serial.print("Failed to read Present Position for motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  dxl_wb.torqueOff(motor_id);
-  result = dxl_wb.setOperatingMode(motor_id, EXT_POSITION_CONTROL_MODE, &log);
-  if (!result) {
-    Serial.print("Failed to set Extended Position Control Mode for motor ");
-    Serial.print(motor_id);
-    Serial.print(": ");
-    Serial.println(log);
-    return;
-  }
-  Serial.print("Homing complete. Current position: ");
-  Serial.println(dump_1_home);
-  dxl_wb.itemWrite(motor_id, "Profile_Velocity", 50);
-  result = dxl_wb.torqueOn(motor_id, &log);
-  if (!result) {
-    Serial.print("Failed to enable torque for motor ");
-  }
-}
-void sortLeft() {
-  uint8_t motor_id = 6;
-  bool result = false;
-  const char* log;
-  dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
-  result = dxl_wb.goalPosition(motor_id, -900);
-  if (!result) {
-    Serial.print("Failed to set Position: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-  while (abs(sort_pos + 900) > 5) {
-    dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
-  }
-  result = dxl_wb.goalPosition(motor_id, 1022);  // Center
-  if (!result) {
-    Serial.print("Failed to set Position: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-  while (abs(sort_pos - 1022) > 5) {
-    dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
+    case 3:
+      if (isQueueEmpty(DXL_SCOOP_R-5) && isQueueEmpty(DXL_SCOOP_L-5)) {
+        addPositionToQueue(DXL_TILT, TILT_UP_POS);
+        scoopUpStage++;
+      }
+      break;
+    case 4:
+	  pubScoopDone(true);
+	  if(isQueueEmpty(DXL_TILT-5)){
+		  addPositionToQueue(DXL_SORT, SORT_NEB);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_GEO);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_NEB);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_GEO);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_NEB);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_GEO);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  addPositionToQueue(DXL_SORT, SORT_NEB);
+		  addPositionToQueue(DXL_SORT, SORT_CENTER);
+		  scoopUpStage++; // Reset to initial stage for next call
+	  }
+      break;
+	  case 5:
+		if(isQueueEmpty(DXL_SORT-5)){
+			addPositionToQueue(DXL_TILT, TILT_DOWN_POS);
+			scoopUpStage++;
+		}
+	  break;
+	  case 6:
+		if(scoop_request){
+			scoop_request = false;
+			scoopUpStage = 0;
+		}
+	  break;
   }
 }
 
-void sortRight() {
-  uint8_t motor_id = 6;
-  bool result = false;
-  const char* log;
-  dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
-  result = dxl_wb.goalPosition(motor_id, 2900);
-  if (!result) {
-    Serial.print("Failed to set Position: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-  while (abs(sort_pos - 2900) > 5) {
-    dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
-  }
-  result = dxl_wb.goalPosition(motor_id, 1022);  // Center
-  if (!result) {
-    Serial.print("Failed to set Position: ");
-    Serial.print(motor_id);
-    Serial.println(log);
-  }
-  while (abs(sort_pos - 1022) > 5) {
-    dxl_wb.itemRead(motor_id, "Present_Position", &sort_pos, &log);
-  }
-}
-
-void tiltUp() {
-  bool result = false;
-  const char* log;
-  dxl_wb.goalPosition(5, tilt_home - 550);
-  while (abs(tilt_pos - (tilt_home - 550)) > 30) {
-    dxl_wb.itemRead(5, "Present_Position", &tilt_pos, &log);
-  }
-}
-
-void tiltDown() {
-  dxl_wb.goalPosition(5, tilt_home);
-}
-
-void scoopUp() {
-  dxl_wb.goalPosition(7, scoop_home_7 + 1175);
-  dxl_wb.goalPosition(8, scoop_home_8 - 1175);
-}
-void scoopDown() {
-  dxl_wb.goalPosition(7, scoop_home_7);
-  dxl_wb.goalPosition(8, scoop_home_8);
-}
-void dumpUp() {
-  dxl_wb.goalPosition(10, dump_1_home - 1250);
-}
-void dumpDown(){
-  dxl_wb.goalPosition(10, dump_1_home);
-}
