@@ -1,2 +1,2 @@
 omnibot_control:waypoint_follower_cpp
--DCATKIN_DEVEL_PREFIX=/home/ubuntu/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/catkin_ws/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/blue_team/Blue-Team-Robot-Files/catkin_ws/install -G Unix Makefiles
