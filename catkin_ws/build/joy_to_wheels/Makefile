@@ -182,6 +182,81 @@ joy_to_wheels_node/fast:
 	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/joy_to_wheels_node.dir/build.make joy_to_wheels/CMakeFiles/joy_to_wheels_node.dir/build
 .PHONY : joy_to_wheels_node/fast
 
+# Convenience name for target.
+joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
+.PHONY : joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+sensor_msgs_generate_messages_py: joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
+
+.PHONY : sensor_msgs_generate_messages_py
+
+# fast build rule for target.
+sensor_msgs_generate_messages_py/fast:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
+.PHONY : sensor_msgs_generate_messages_py/fast
+
+# Convenience name for target.
+joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
+.PHONY : joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+sensor_msgs_generate_messages_nodejs: joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : sensor_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+sensor_msgs_generate_messages_nodejs/fast:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
+.PHONY : sensor_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
+.PHONY : joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+sensor_msgs_generate_messages_lisp: joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : sensor_msgs_generate_messages_lisp
+
+# fast build rule for target.
+sensor_msgs_generate_messages_lisp/fast:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
+.PHONY : sensor_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
+.PHONY : joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+sensor_msgs_generate_messages_eus: joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
+
+.PHONY : sensor_msgs_generate_messages_eus
+
+# fast build rule for target.
+sensor_msgs_generate_messages_eus/fast:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
+.PHONY : sensor_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
+.PHONY : joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+sensor_msgs_generate_messages_cpp: joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : sensor_msgs_generate_messages_cpp
+
+# fast build rule for target.
+sensor_msgs_generate_messages_cpp/fast:
+	cd /home/blue_team/Blue-Team-Robot-Files/catkin_ws/build && $(MAKE) -f joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make joy_to_wheels/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
+.PHONY : sensor_msgs_generate_messages_cpp/fast
+
 src/joy_to_wheels.o: src/joy_to_wheels.cpp.o
 
 .PHONY : src/joy_to_wheels.o
@@ -223,6 +298,11 @@ help:
 	@echo "... test"
 	@echo "... install/local"
 	@echo "... joy_to_wheels_node"
+	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... sensor_msgs_generate_messages_nodejs"
+	@echo "... sensor_msgs_generate_messages_lisp"
+	@echo "... sensor_msgs_generate_messages_eus"
+	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... src/joy_to_wheels.o"
 	@echo "... src/joy_to_wheels.i"
 	@echo "... src/joy_to_wheels.s"

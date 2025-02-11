@@ -136,7 +136,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/mobile_ik/cmake_install.cmake")
   include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_controller/cmake_install.cmake")
   include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/pose_estimation/cmake_install.cmake")
-  include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/imu_publisher/cmake_install.cmake")
   include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/joy_to_wheels/cmake_install.cmake")
   include("/home/blue_team/Blue-Team-Robot-Files/catkin_ws/build/omni_wheel_ik/cmake_install.cmake")
 

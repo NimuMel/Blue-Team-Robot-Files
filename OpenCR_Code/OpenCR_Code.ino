@@ -17,7 +17,7 @@ std_msgs::Float32 z_degrees;
 
 void setup() {
   Serial.begin(57600);
-  ros_inti();
+  ros_init();
   setupDynWheels();
   autoHome(5);
   sortInit();
