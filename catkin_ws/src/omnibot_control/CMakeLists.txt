@@ -126,6 +126,9 @@ include_directories(
 #   src/${PROJECT_NAME}/omnibot_control.cpp
 # )
 
+
+
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -139,7 +142,7 @@ include_directories(
 add_executable(pose_estimation_node src/pose_estimation_node.cpp)
 add_executable(pose_controller_node src/pose_controller_node.cpp)
 add_executable(omni_wheel_ik_node src/omni_wheel_ik_node.cpp)
-
+add_executable(odom_logger src/odom_logger.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,6 +166,7 @@ target_link_libraries(pose_controller_node
 target_link_libraries(omni_wheel_ik_node
   ${catkin_LIBRARIES}
 )
+target_link_libraries(odom_logger ${catkin_LIBRARIES})
 
 
 #############

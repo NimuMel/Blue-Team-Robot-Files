@@ -198,21 +198,6 @@ actionlib_msgs_generate_messages_py/fast:
 .PHONY : actionlib_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-.PHONY : omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_cpp: omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-
-.PHONY : actionlib_generate_messages_cpp
-
-# fast build rule for target.
-actionlib_generate_messages_cpp/fast:
-	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build.make omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build
-.PHONY : actionlib_generate_messages_cpp/fast
-
-# Convenience name for target.
 omnibot_control/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
 	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 omnibot_control/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
 .PHONY : omnibot_control/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
@@ -783,6 +768,36 @@ tf_generate_messages_lisp/fast:
 .PHONY : tf_generate_messages_lisp/fast
 
 # Convenience name for target.
+omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+.PHONY : omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+actionlib_generate_messages_cpp: omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+
+.PHONY : actionlib_generate_messages_cpp
+
+# fast build rule for target.
+actionlib_generate_messages_cpp/fast:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build.make omnibot_control/CMakeFiles/actionlib_generate_messages_cpp.dir/build
+.PHONY : actionlib_generate_messages_cpp/fast
+
+# Convenience name for target.
+omnibot_control/CMakeFiles/odom_logger.dir/rule:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 omnibot_control/CMakeFiles/odom_logger.dir/rule
+.PHONY : omnibot_control/CMakeFiles/odom_logger.dir/rule
+
+# Convenience name for target.
+odom_logger: omnibot_control/CMakeFiles/odom_logger.dir/rule
+
+.PHONY : odom_logger
+
+# fast build rule for target.
+odom_logger/fast:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/odom_logger.dir/build.make omnibot_control/CMakeFiles/odom_logger.dir/build
+.PHONY : odom_logger/fast
+
+# Convenience name for target.
 omnibot_control/CMakeFiles/tf_generate_messages_nodejs.dir/rule:
 	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 omnibot_control/CMakeFiles/tf_generate_messages_nodejs.dir/rule
 .PHONY : omnibot_control/CMakeFiles/tf_generate_messages_nodejs.dir/rule
@@ -962,6 +977,33 @@ pose_controller_node/fast:
 	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/pose_controller_node.dir/build.make omnibot_control/CMakeFiles/pose_controller_node.dir/build
 .PHONY : pose_controller_node/fast
 
+src/odom_logger.o: src/odom_logger.cpp.o
+
+.PHONY : src/odom_logger.o
+
+# target to build an object file
+src/odom_logger.cpp.o:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/odom_logger.dir/build.make omnibot_control/CMakeFiles/odom_logger.dir/src/odom_logger.cpp.o
+.PHONY : src/odom_logger.cpp.o
+
+src/odom_logger.i: src/odom_logger.cpp.i
+
+.PHONY : src/odom_logger.i
+
+# target to preprocess a source file
+src/odom_logger.cpp.i:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/odom_logger.dir/build.make omnibot_control/CMakeFiles/odom_logger.dir/src/odom_logger.cpp.i
+.PHONY : src/odom_logger.cpp.i
+
+src/odom_logger.s: src/odom_logger.cpp.s
+
+.PHONY : src/odom_logger.s
+
+# target to generate assembly for a file
+src/odom_logger.cpp.s:
+	cd /home/ubuntu/catkin_ws/build && $(MAKE) -f omnibot_control/CMakeFiles/odom_logger.dir/build.make omnibot_control/CMakeFiles/odom_logger.dir/src/odom_logger.cpp.s
+.PHONY : src/odom_logger.cpp.s
+
 src/omni_wheel_ik_node.o: src/omni_wheel_ik_node.cpp.o
 
 .PHONY : src/omni_wheel_ik_node.o
@@ -1052,7 +1094,6 @@ help:
 	@echo "... install/strip"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... actionlib_msgs_generate_messages_py"
-	@echo "... actionlib_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... nav_msgs_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_py"
@@ -1094,6 +1135,8 @@ help:
 	@echo "... pose_estimation_node"
 	@echo "... nav_msgs_generate_messages_py"
 	@echo "... tf_generate_messages_lisp"
+	@echo "... actionlib_generate_messages_cpp"
+	@echo "... odom_logger"
 	@echo "... tf_generate_messages_nodejs"
 	@echo "... nav_msgs_generate_messages_nodejs"
 	@echo "... sensor_msgs_generate_messages_cpp"
@@ -1109,6 +1152,9 @@ help:
 	@echo "... pose_controller_node"
 	@echo "... list_install_components"
 	@echo "... install"
+	@echo "... src/odom_logger.o"
+	@echo "... src/odom_logger.i"
+	@echo "... src/odom_logger.s"
 	@echo "... src/omni_wheel_ik_node.o"
 	@echo "... src/omni_wheel_ik_node.i"
 	@echo "... src/omni_wheel_ik_node.s"

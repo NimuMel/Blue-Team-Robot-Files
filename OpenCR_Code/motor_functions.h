@@ -31,8 +31,7 @@ void setupWheels();
 void status();
 void homeAll();
 void initSort();
-bool detectOre();
-bool detectMag();
+
 
 void updateMotors();
 void initMotorQueue();
@@ -45,13 +44,13 @@ void setPos(uint8_t motor_id, int position);
 void getPos(uint8_t motor_id, int32_t &pos);
 bool reachedGoal(int motor_index);
 
-
-
+void scoopStateMachine();
+void sortStateMachine();
+void beaconStateMachine();
 
 void stateMachine();
 
 
-void scoopUp();
 
 
 

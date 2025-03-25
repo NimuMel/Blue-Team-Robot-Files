@@ -7,7 +7,7 @@
 
 // Robot-specific constants
 const float WHEEL_RADIUS = 0.054 / 2;  // Wheel radius in meters
-const float ROBOT_RADIUS = 0.24 / 2;   // Robot radius in meters
+const float ROBOT_RADIUS = 0.25 / 2;   // Robot radius in meters
 
 ros::Publisher wheel_1;
 ros::Publisher wheel_2;
@@ -15,7 +15,7 @@ ros::Publisher wheel_3;
 ros::Publisher wheel_4;
 
 std_msgs::Float64 w1;
-std_msgs::Float64 w2;
+std_msgs::Float64 w2; 
 std_msgs::Float64 w3;
 std_msgs::Float64 w4;
 void velCap(std_msgs::Float64 w){

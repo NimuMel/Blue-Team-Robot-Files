@@ -9,117 +9,241 @@ public:
     WaypointStateMachine(ros::NodeHandle& nh)
         : nh_(nh),
           current_index_(0),
-          position_tolerance_(0.005),     // Position tolerance in meters
-          orientation_tolerance_(0.005) { // Orientation tolerance in radians
+          position_tolerance_(0.01),
+          orientation_tolerance_(0.02),
+          can_proceed_(false), // Initialize to false
+		  action_performed_(false)
+    {
         // Initialize waypoints
-        initializeWaypoints();
+        initializeWaypoints();  
 
-        // Publisher to send waypoints
+        // Publishers and subscribers
         waypoint_pub_ = nh_.advertise<geometry_msgs::Pose2D>("/waypoint", 10);
-		scoop_pub = nh.advertise<std_msgs::Bool>("/OpenCR/scoop", 1000);
-        // Subscriber to receive robot's current pose
+        scoop_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/scoop", 1000);
+		
+		scoop_tilt_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/scoop_tilt", 1000);
+		beacon_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/beacon_place", 1000);
+		dump_geo_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/dump_geo", 1000);
+		dump_neo_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/dump_neo", 1000);
+		grab_tilt_pub = nh_.advertise<std_msgs::Bool>("/OpenCR/tilt_grab_up", 1000);
+		 
         robot_pose_sub_ = nh_.subscribe("/robot_pose", 10, &WaypointStateMachine::robotPoseCallback, this);
-
+        proceed_signal_sub_ = nh_.subscribe("/OpenCR/scoop_done", 10, &WaypointStateMachine::proceedSignalCallback, this);
+		action_done_ = nh_.subscribe("/OpenCR/action_done", 10, &WaypointStateMachine::proceedActionDone, this);
+		
+		beaconDown = false;
+		bucket_up = false;
         ROS_INFO("Starting waypoint state machine.");
         publishCurrentWaypoint();
     }
 
+    struct Waypoint {
+    geometry_msgs::Pose2D pose;
+    bool wait;
+    int action; // Action identifier
+	};
+	enum ActionType {
+    ACTION_NONE = 0,
+    SCOOP_RQS,
+    TILT_SCOOP_REQUEST,
+    BEACON_ACTION,
+	BUCKET_GRAB,
+	DUMP_GEO,
+	DUMP_NEO,
+	};
+
+
+	void publishWaypoint(const Waypoint& waypoint) {
+        ROS_INFO("Publishing waypoint: x=%.2f, y=%.2f, theta=%.2f, wait=%s",
+                 waypoint.pose.x, waypoint.pose.y, waypoint.pose.theta,
+                 waypoint.wait ? "true" : "false");
+        waypoint_pub_.publish(waypoint.pose);
+    }
+	void makeWaypoint(double x, double y, double theta, bool wait, int action) {
+		Waypoint wp;
+		wp.pose.x = x;
+		wp.pose.y = y;
+		wp.pose.theta = theta;
+		wp.wait = wait;
+		wp.action = action;
+		waypoints_.push_back(wp);
+	}
     void initializeWaypoints() {
-        // Define your list of waypoints (x, y, theta)
-        geometry_msgs::Pose2D wp1;
-        wp1.x = 0.0;
-        wp1.y = 0.0;
-        wp1.theta = 0.0;
+		
+		//Start and Scoop
+		makeWaypoint(0.79375, 0.150, 0.0, true, ACTION_NONE);                 
+		makeWaypoint(0.79375, 0.60, 0.0, true, SCOOP_RQS);             
+		// turn and go to beacon tilt and back up
+		makeWaypoint(0.79375, 0.5715, 1.57079632679, false, ACTION_NONE);      
+		makeWaypoint(0.19, 0.6, 1.57079632679, true, TILT_SCOOP_REQUEST);      
+		makeWaypoint(0.32, 0.60, 1.57079632679, true, SCOOP_RQS);   
 
-        geometry_msgs::Pose2D wp2;
-        wp2.x = 0.0;
-        wp2.y = 0.4;
-        wp2.theta = 0.0;
-
-        geometry_msgs::Pose2D wp3;
-        wp3.x = 0.0;
-        wp3.y = 0.45;
-        wp3.theta = 0.0; // -90 degrees in radians
+		
+		makeWaypoint(0.32, 0.60, -1.57079632679, false, ACTION_NONE);    
+		makeWaypoint(0.165, 0.57, -1.57079632679, false, ACTION_NONE);          
+		makeWaypoint(0.165, 0.57, -1.57079632679, true, BEACON_ACTION);         
+		makeWaypoint(0.165, 0.52, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.165, 0.62, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.165, 0.58, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.18, 0.52, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.18, 0.62, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.19, 0.58, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.25, 0.58, -1.57079632679, false, BEACON_ACTION);
+		makeWaypoint(0.25, 0.58, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.16, 0.85, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.1, 0.85, 0.0, false, ACTION_NONE);//hit beacon wall 
+		// makeWaypoint(0.1, 1.05, 0.0, false, ACTION_NONE);
+		// makeWaypoint(0.1, 0.9, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.36, 0.85, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.36, 1.05, 0.0, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(0.36, .88, 0.0, true, SCOOP_RQS);
+		makeWaypoint(0.77, 0.88, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.72, 0.55, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.89, 0.55, 0.0, false, ACTION_NONE);
+		// makeWaypoint(0.80, 0.65, 0.0, false, ACTION_NONE);
+		// makeWaypoint(0.90, 0.70, 0.0, false, ACTION_NONE);
+		// makeWaypoint(0.88, 1.1, 0.0, false, ACTION_NONE);
+		// makeWaypoint(0.95, 1.1, 0.0, false, ACTION_NONE);
+		makeWaypoint(0.89, 1.1, 0.0, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(0.89, 0.95, 0.0, true, SCOOP_RQS);
+		makeWaypoint(0.89, 1.13, 0.0, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(0.89, 0.95, 0.0, true, SCOOP_RQS);
+		makeWaypoint(0.89, 0.95, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.89, 1.2, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.2, 1.2, -1.57079632679, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(1.08, 1.2, -1.57079632679, true, SCOOP_RQS);
+		makeWaypoint(1.08, 1.1, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.08, 1.0, -3.14, false, ACTION_NONE);
+		makeWaypoint(1.08, 1.3, -3.14, false, ACTION_NONE);
 		
 		
-		geometry_msgs::Pose2D wp4;
-        wp4.x = 0.0;
-        wp4.y = 0.45;
-        wp4.theta = -1.571;
 		
-		geometry_msgs::Pose2D wp5;
-        wp5.x = 0.4;
-        wp5.y = 0.45;
-        wp5.theta = -1.571;
+		makeWaypoint(1.3, 1.3, -3.14, false, ACTION_NONE);//home cornner
+		makeWaypoint(1.26, 1.3, -3.14, false, ACTION_NONE);
+		makeWaypoint(1.26, 0.59, -3.14, false, ACTION_NONE);
+		makeWaypoint(1.05, 0.59, -3.14, false, ACTION_NONE);
+		makeWaypoint(1.05, 0.25, -3.14, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(1.05, 0.39, -3.14, true, SCOOP_RQS);
+		makeWaypoint(1.05, 0.65, -3.14, false, ACTION_NONE);
+		makeWaypoint(1.05, 0.65, 1.57079632679, false, ACTION_NONE);// problem here with sorting then grabbing
 		
-		geometry_msgs::Pose2D wp6;
-        wp6.x = 1.0;
-        wp6.y = 0.45;
-        wp6.theta = -1.571;
 		
-		geometry_msgs::Pose2D wp7;
-        wp7.x = 1.0;
-        wp7.y = 0.45;
-        wp7.theta = 1.571;
 		
-		geometry_msgs::Pose2D wp8;
-        wp8.x = 0.7;
-        wp8.y = 0.45;
-        wp8.theta = 1.571;
 		
-		geometry_msgs::Pose2D wp9;
-        wp9.x = 0.0;
-        wp9.y = 0.45;
-        wp9.theta = 1.571;
-
-        waypoints_.push_back(wp1);
-        waypoints_.push_back(wp2);
-        waypoints_.push_back(wp3);
-		waypoints_.push_back(wp4);
-		waypoints_.push_back(wp5);
-		// waypoints_.push_back(wp6);
-		// waypoints_.push_back(wp7);
-		// waypoints_.push_back(wp8);
-		// waypoints_.push_back(wp9);
+		
+		
+		
+		makeWaypoint(1.4, 0.65, 1.57079632679, false, ACTION_NONE);             // Waypoint 13'
+		makeWaypoint(1.3, 0.65, 1.57079632679, false, ACTION_NONE); 
+		makeWaypoint(1.3, 0.45, 1.57079632679, false, BUCKET_GRAB); 
+		//makeWaypoint(1.1, 0.45, 1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.3, 0.4, 1.57079632679, false, ACTION_NONE);   
+		makeWaypoint(1.35, 0.28, 1.57079632679, false, BUCKET_GRAB);
+		makeWaypoint(1.29, 0.25, 1.57079632679, true, DUMP_GEO);
+		makeWaypoint(1.35, 0.25, 1.57079632679, false, ACTION_NONE);		
+		makeWaypoint(1.25, 0.6, 1.57079632679, false, ACTION_NONE);		// Waypoint 16
+		makeWaypoint(0.5, 0.6, 1.57079632679, false, ACTION_NONE);		//cross with bucket
+		
+		makeWaypoint(0.5, 0.6, -1.57079632679, false, ACTION_NONE);  	//turn around
+		makeWaypoint(0.3, 0.6, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.4, 0.6, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.3, 0.9, -1.57079632679, false, BUCKET_GRAB);
+		makeWaypoint(0.35, 0.9, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.5, 0.8, -1.57079632679, false, BUCKET_GRAB);
+		//makeWaypoint(1.0, 0.8, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.1, 0.8, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.1, 1.1, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.4, 1.1, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.5, 1.1, -1.57079632679, false, ACTION_NONE);//
+		makeWaypoint(0.55, 0.95, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.55, 0.95, -1.57079632679, false, BUCKET_GRAB);
+		makeWaypoint(0.1, 0.8, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.1, 1.0, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.1, 1.0, -1.57079632679, true, DUMP_NEO);
+		makeWaypoint(0.1, 0.95, -1.57079632679, false, BUCKET_GRAB);
+		
+		makeWaypoint(0.9, 0.95, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(0.9, 1.2, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.2, 1.2, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(1.2, .8, -1.57079632679, false, ACTION_NONE);
+		//makeWaypoint(1.4, .8, -1.57079632679, false, ACTION_NONE);
+		makeWaypoint(2.3, .8, -1.57079632679, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(2.15, .8, -1.57079632679, true, SCOOP_RQS);
+		makeWaypoint(2.3, .8, -1.57079632679, true, TILT_SCOOP_REQUEST);
+		makeWaypoint(2.15, .8, -1.57079632679, true, SCOOP_RQS);
+		// makeWaypoint(1.85, .8, 1.57079632679, false, ACTION_NONE);
+		// makeWaypoint(.6, .8, 1.57079632679, false, ACTION_NONE);
+		
+		//makeWaypoint(0.1, 1.15, -1.57079632679, false, ACTION_NONE);             // Waypoint 17
+		
+        // Define your waypoints with the wait flag
+        // Waypoint wp1;
+		// wp1.pose.x = 0.79375;
+		// wp1.pose.y = 0.150;
+		// wp1.pose.theta = 0.0;
+		// wp1.wait = false;
+		// wp1.action = ACTION_NONE;
+		// waypoints_.push_back(wp1);
     }
 
-    void publishWaypoint(const geometry_msgs::Pose2D& waypoint) {
-        ROS_INFO("Publishing waypoint: x=%.2f, y=%.2f, theta=%.2f",
-                 waypoint.x, waypoint.y, waypoint.theta);
-        waypoint_pub_.publish(waypoint);
-    }
+    
 
     void publishCurrentWaypoint() {
-        if (current_index_ < waypoints_.size()) {
-            current_waypoint_ = waypoints_[current_index_];
-			if(current_index_ == 2){
-				std_msgs::Bool pub;
-				pub.data = true;
-				scoop_pub.publish(pub);
-			}
-			else{
-				std_msgs::Bool pub;
-				pub.data = false;
-				scoop_pub.publish(pub);
-			}
-            publishWaypoint(current_waypoint_);
-        } else {
-            ROS_INFO("All waypoints have been published and reached.");
-            ros::shutdown();
-        }
-    }
+		if (current_index_ < waypoints_.size()) {
+			current_waypoint_ = waypoints_[current_index_];
+
+			publishWaypoint(current_waypoint_);
+		} else {
+			ROS_INFO("All waypoints have been published and reached.");
+			ros::shutdown();
+		}
+	}
+
 
     void robotPoseCallback(const geometry_msgs::Pose2D::ConstPtr& msg) {
-        double position_error = calculatePositionError(*msg, current_waypoint_);
-        double orientation_error = calculateOrientationError(*msg, current_waypoint_);
+		double position_error = calculatePositionError(*msg, current_waypoint_.pose);
+		double orientation_error = calculateOrientationError(*msg, current_waypoint_.pose);
 
-        if (position_error <= position_tolerance_ && orientation_error <= orientation_tolerance_) {
-            ROS_INFO("Goal reached for waypoint %zu.", current_index_ + 1);
-            current_index_++;
-            publishCurrentWaypoint();
-        } else {
-            // Uncomment for debugging
-            // ROS_INFO("Position error: %.3f, Orientation error: %.3f", position_error, orientation_error);
+		if (position_error <= position_tolerance_ && orientation_error <= orientation_tolerance_) {
+			if (!action_performed_) {
+				ROS_INFO("Reached waypoint %zu.", current_index_ + 1);
+
+				// Perform the action associated with this waypoint
+				performAction(current_waypoint_.action);
+				action_performed_ = true; // Mark the action as performed
+			}
+
+			if (current_waypoint_.wait) {
+				if (can_proceed_) {
+					ROS_INFO("Proceeding to next waypoint after waiting.");
+					can_proceed_ = false; // Reset for future waits
+					action_performed_ = false; // Reset action flag for next waypoint
+					current_index_++;
+					publishCurrentWaypoint();
+				} else {
+					ROS_INFO("Waiting at waypoint %zu until proceed signal is received.", current_index_ + 1);
+					// Robot remains at current position
+				}
+			} else {
+				current_index_++;
+				action_performed_ = false; // Reset action flag for next waypoint
+				can_proceed_ = false;
+				publishCurrentWaypoint();
+			}
+		}
+}
+
+
+    void proceedSignalCallback(const std_msgs::Bool::ConstPtr& msg) {
+        can_proceed_ = msg->data;
+        if (can_proceed_) {
+            ROS_INFO("Received proceed signal.");
+        }
+    }
+	void proceedActionDone(const std_msgs::Bool::ConstPtr& msg) {
+        can_proceed_ = msg->data;
+        if (can_proceed_) {
+            ROS_INFO("Received proceed signal.");
         }
     }
 
@@ -129,28 +253,109 @@ public:
 
     double calculateOrientationError(const geometry_msgs::Pose2D& pose1, const geometry_msgs::Pose2D& pose2) {
         double error = pose1.theta - pose2.theta;
-        // Normalize the angle to the range [-pi, pi]
         while (error > M_PI) error -= 2 * M_PI;
         while (error < -M_PI) error += 2 * M_PI;
         return fabs(error);
     }
+	void performAction(int action) {
+		switch (action) {
+			case ACTION_NONE:
+				// No action needed
+				ROS_INFO("No action for this waypoint.");
+				break;
+			case SCOOP_RQS:
+				actionScoop();
+				break; 
+			case TILT_SCOOP_REQUEST:
+				scoopTilt();
+				break;
+			case BEACON_ACTION:
+				beacon_toggle();
+				break;
+			case BUCKET_GRAB:
+				grabBucketAction();
+			break;
+			case DUMP_GEO:
+				dump(true);
+			break;
+			case DUMP_NEO:
+				dump(false);
+			break;
+			default:
+				ROS_WARN("Unknown action %d at waypoint %zu.", action, current_index_ + 1);
+				break;
+		}
+	}
+	void actionScoop() {
+		std_msgs::Bool scoop_cmd;
+		scoop_cmd.data = true;
+		scoop_pub.publish(scoop_cmd);
+		ROS_INFO("Scoop turned ON.");
+	}
+
+	void scoopTilt() {
+		std_msgs::Bool scoop_tilt_cmd;
+		scoop_tilt_cmd.data = true;
+		scoop_tilt_pub.publish(scoop_tilt_cmd);
+		ROS_INFO("Scoop turned OFF.");
+	}
+
+	void grabBucketAction() {
+		std_msgs::Bool bucket_cmd;
+		bucket_up = !bucket_up;
+		bucket_cmd.data = bucket_up;
+		grab_tilt_pub.publish(bucket_cmd);
+	}
+	void dump(bool dump_geo){
+		std_msgs::Bool dump_cmd;
+		dump_cmd.data = true;
+		if(dump_geo){
+			dump_geo_pub.publish(dump_cmd);
+		}
+		else{
+			dump_neo_pub.publish(dump_cmd);
+		}
+	}
+	
+	void beacon_toggle(){
+		std_msgs::Bool beacon_cmd;
+		beaconDown = !beaconDown;
+		beacon_cmd.data = beaconDown;
+		beacon_pub.publish(beacon_cmd);
+	}
+
 
 private:
     ros::NodeHandle nh_;
     ros::Publisher waypoint_pub_;
-	ros::Publisher scoop_pub;
+    ros::Publisher scoop_pub;
+	
+	ros::Publisher scoop_tilt_pub;
+	ros::Publisher beacon_pub;
+	ros::Publisher dump_geo_pub;
+	ros::Publisher dump_neo_pub;
+	ros::Publisher grab_tilt_pub;
+	
     ros::Subscriber robot_pose_sub_;
-    std::vector<geometry_msgs::Pose2D> waypoints_;
-    geometry_msgs::Pose2D current_waypoint_;
+    ros::Subscriber proceed_signal_sub_;
+	ros::Subscriber action_done_;
+
+    std::vector<Waypoint> waypoints_;
+    Waypoint current_waypoint_;
     size_t current_index_;
     double position_tolerance_;
     double orientation_tolerance_;
+	bool beaconDown;
+	bool bucket_up;
+    bool can_proceed_;
+	bool action_performed_;
+
 };
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "waypoint_state_machine");
     ros::NodeHandle nh;
-
+	
     WaypointStateMachine wsm(nh);
 
     ros::spin();
